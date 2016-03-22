@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:background="#CCC"
+            android:layout_width="match_parent"
+            android:paddingBottom="1dp"
+            android:paddingRight="1dp">
+            <TextView
+                android:layout_marginLeft="1dp"
+                android:padding="5dp"
+                android:background="#FFF"
+                android:text="位置"/>
+            <TextView
+                android:layout_marginLeft="1dp"
+                android:padding="5dp"
+                android:background="#FFF"
+                android:id="@+id/location_table"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <!--android:ellipsize="end"-->
+        </TableRow>
+
+        <TableRow
+            android:background="#CCC"
+            android:paddingBottom="1dp"
+            android:paddingRight="1dp">
+            <TextView
+                android:layout_marginLeft="1dp"
+                android:padding="5dp"
+                android:background="#FFF"
+                android:text="索书号"/>
+            <TextView
+                android:layout_marginLeft="1dp"
+                android:id="@+id/subscring_table"
+                android:padding="5dp"
+                android:background="#FFF"
+                android:gravity="center"/>
+        </TableRow>
+
+        <TableRow
+            android:background="#CCC"
+            android:paddingBottom="1dp"
+            android:paddingRight="1dp">
+            <TextView
+                android:layout_marginLeft="1dp"
+                android:padding="5dp"
+                android:background="#FFF"
+                android:text="单册状态"/>
+            <TextView
+                android:layout_marginLeft="1dp"
+                android:padding="5dp"
+                android:id="@+id/single_status_table"
+                android:background="#FFF"
+                android:gravity="center"/>
+        </TableRow>
+
+        <TableRow
+            android:background="#CCC"
+            android:paddingBottom="1dp"
+            android:paddingRight="1dp">
+            <TextView
+                android:layout_marginLeft="1dp"
+                android:padding="5dp"
+                android:background="#FFF"
+                android:text="应还日期"/>
+            <TextView
+                android:layout_marginLeft="1dp"
+                android:padding="5dp"
+                android:background="#FFF"
+                android:id="@+id/return_date_table"
+                android:gravity="center"/>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

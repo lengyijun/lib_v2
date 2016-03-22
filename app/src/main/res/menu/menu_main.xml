@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.alirezaafkar.example.MainActivity">
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="nothing"
+        android:icon="@android:drawable/ic_dialog_dialer"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/add_to_collection"
+                android:title="收藏此书"/>
+            <item
+                android:id="@+id/remove_from_collection"
+                android:title="取消收藏"/>
+        </menu>
+    </item>
+
+</menu>
