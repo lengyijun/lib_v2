@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.steven.sjtu_lib_v2.R;
-import com.example.steven.sjtu_lib_v2.adapter.Dialog_adapter;
+import com.example.steven.sjtu_lib_v2.adapter.DialogAdapter;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -48,7 +48,7 @@ public class Book_detail_dialog extends DialogFragment{
         ButterKnife.bind(this,view);
 
 //        lv.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_white_text, out_in));
-        Dialog_adapter dialog_adapter=new Dialog_adapter(getActivity(),0,loc_sta);
+        DialogAdapter dialog_adapter=new DialogAdapter(getActivity(),0,loc_sta);
         lv.setAdapter(dialog_adapter);
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity())
             .setTitle(book_name)

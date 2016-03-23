@@ -19,6 +19,8 @@
     <activity android:name=".activity.MainActivity" />
     <activity android:name=".activity.Single_detail" />
     <activity android:name=".activity.MyCollectionActivity" />
-    <activity android:name=".activity.MyBorrow" />
+    <activity android:name=".activity.MyBorrowActivity" />
+    <activity android:name=".activity.RankActivity" />
+
 </application>
 </manifest>

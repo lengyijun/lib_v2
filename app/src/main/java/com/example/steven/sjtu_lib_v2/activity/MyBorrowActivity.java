@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 /**
  * Created by steven on 2016/3/23.
  */
-public class MyBorrow extends AppCompatActivity implements Refresh_borrow{
+public class MyBorrowActivity extends AppCompatActivity implements Refresh_borrow{
     @Bind(R.id.listView2)ListView listView;
     MyBorrowAdapter myBorrowAdapter;
 

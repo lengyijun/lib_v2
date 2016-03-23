@@ -154,11 +154,15 @@ public class Search_activity extends AppCompatActivity
         int id=item.getItemId();
         if(id==R.id.log_in){
             Intent intent=new Intent();
-            intent.setClass(Search_activity.this,MyBorrow.class);
+            intent.setClass(Search_activity.this,MyBorrowActivity.class);
             startActivity(intent);
         }else if(id==R.id.mycollection){
             Intent intent=new Intent();
             intent.setClass(Search_activity.this,MyCollectionActivity.class);
+            startActivity(intent);
+        }else if(id==R.id.borrowrank){
+            Intent intent=new Intent();
+            intent.setClass(Search_activity.this,RankActivity.class);
             startActivity(intent);
         }
         return true;

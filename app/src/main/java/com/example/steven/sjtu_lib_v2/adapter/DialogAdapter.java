@@ -16,10 +16,10 @@ import java.util.List;
 /**
  * Created by steven on 2016/2/13.
  */
-public class Dialog_adapter extends ArrayAdapter<Element>{
+public class DialogAdapter extends ArrayAdapter<Element>{
     List<Element> total_element;
 
-    public Dialog_adapter(Context context, int resource, List<Element> objects) {
+    public DialogAdapter(Context context, int resource, List<Element> objects) {
         super(context, resource, objects);
         this.total_element=objects;
     }
