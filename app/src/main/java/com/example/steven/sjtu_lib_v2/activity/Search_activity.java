@@ -85,7 +85,7 @@ public class Search_activity extends AppCompatActivity
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent=new Intent();
-                intent.setClass(Search_activity.this,Main2Activity.class);
+                intent.setClass(Search_activity.this,MyCollectionActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -155,6 +155,10 @@ public class Search_activity extends AppCompatActivity
         if(id==R.id.log_in){
             Intent intent=new Intent();
             intent.setClass(Search_activity.this,MyBorrow.class);
+            startActivity(intent);
+        }else if(id==R.id.mycollection){
+            Intent intent=new Intent();
+            intent.setClass(Search_activity.this,MyCollectionActivity.class);
             startActivity(intent);
         }
         return true;

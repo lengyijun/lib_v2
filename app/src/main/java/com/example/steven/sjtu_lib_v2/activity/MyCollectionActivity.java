@@ -20,7 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 //收藏界面的activity
-public class Main2Activity extends AppCompatActivity {
+public class MyCollectionActivity extends AppCompatActivity {
     @Bind(R.id.listView2)ListView lv;
     SQLiteDatabase db;
 
@@ -46,7 +46,7 @@ public class Main2Activity extends AppCompatActivity {
                 String url=cursor.getString(cursor.getColumnIndex("url"));
 
                 Intent intent=new Intent();
-                intent.setClass(Main2Activity.this,Single_detail.class);
+                intent.setClass(MyCollectionActivity.this,Single_detail.class);
                 intent.putExtra("detail",name);
                 intent.putExtra("url",url);
                 startActivity(intent);
