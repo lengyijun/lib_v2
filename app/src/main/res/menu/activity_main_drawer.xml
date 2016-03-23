@@ -3,33 +3,33 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/myborrow"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="我的借阅" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/mycollection"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="我的收藏" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/borrowrank"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="借阅排名" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/newbookinfo"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="新书通报" />
     </group>
 
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/log_in"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="登陆" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/log_out"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="退出" />
         </menu>
     </item>
 

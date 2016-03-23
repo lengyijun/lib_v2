@@ -151,6 +151,12 @@ public class Search_activity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        return false;
+        int id=item.getItemId();
+        if(id==R.id.log_in){
+            Intent intent=new Intent();
+            intent.setClass(Search_activity.this,MyBorrow.class);
+            startActivity(intent);
+        }
+        return true;
     }
 }

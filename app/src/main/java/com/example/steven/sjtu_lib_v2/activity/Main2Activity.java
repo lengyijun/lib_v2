@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+//收藏界面的activity
 public class Main2Activity extends AppCompatActivity {
     @Bind(R.id.listView2)ListView lv;
     SQLiteDatabase db;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
