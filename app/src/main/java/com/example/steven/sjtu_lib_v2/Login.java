@@ -25,9 +25,13 @@ import okhttp3.Call;
 public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
     Elements elements;
     private Refresh_borrow listener;
+    private String name;
+    private String pass;
 
-    public Login(Refresh_borrow listener){
+    public Login(Refresh_borrow listener,String name,String pass){
         this.listener=listener;
+        this.name=name;
+        this.pass=pass;
     }
 
     @Override
@@ -76,8 +80,8 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
                                                 .addParams("se", se)
                                                 .addParams("v", v)
                                                 .addParams("captcha", captcha_text)
-                                                .addParams("user", "maundercurfew")
-                                                .addParams("pass", "stodgy1")
+                                                .addParams("user", name)
+                                                .addParams("pass", pass)
                                                 .addParams("imageField.x", "55")
                                                 .addParams("imageField.y", "3")
                                                 .build()
@@ -111,11 +115,11 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
                                                                             @Override
                                                                             public void onResponse(String response) {
                                                                                 System.out.println(response);
-                                                                                Document document=Jsoup.parse(response);
-                                                                                Pattern pattern=Pattern.compile("(?<=href=\").*func=bor-info");
-                                                                                Matcher matcher=pattern.matcher(response);
+                                                                                Document document = Jsoup.parse(response);
+                                                                                Pattern pattern = Pattern.compile("(?<=href=\").*func=bor-info");
+                                                                                Matcher matcher = pattern.matcher(response);
                                                                                 if (matcher.find()) {
-                                                                                    String url=matcher.group(0);
+                                                                                    String url = matcher.group(0);
                                                                                     System.out.println(url);
                                                                                     OkHttpUtils.get()
                                                                                             .url(url)
@@ -129,10 +133,10 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
                                                                                                 @Override
                                                                                                 public void onResponse(String response) {
                                                                                                     System.out.println(response);
-                                                                                                    Pattern pattern=Pattern.compile("(?<=javascript:replacePage\\(').*func=bor-loan&adm_library=SJT50");
-                                                                                                    Matcher matcher=pattern.matcher(response);
+                                                                                                    Pattern pattern = Pattern.compile("(?<=javascript:replacePage\\(').*func=bor-loan&adm_library=SJT50");
+                                                                                                    Matcher matcher = pattern.matcher(response);
                                                                                                     if (matcher.find()) {
-                                                                                                        String url=matcher.group(0);
+                                                                                                        String url = matcher.group(0);
                                                                                                         OkHttpUtils.get()
                                                                                                                 .url(url)
                                                                                                                 .build()
@@ -145,8 +149,8 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
                                                                                                                     @Override
                                                                                                                     public void onResponse(String response) {
                                                                                                                         System.out.println(response);
-                                                                                                                        Document document=Jsoup.parse(response);
-                                                                                                                        elements=document.getElementsByAttributeValue("id", "centered");
+                                                                                                                        Document document = Jsoup.parse(response);
+                                                                                                                        elements = document.getElementsByAttributeValue("id", "centered");
                                                                                                                         System.out.println(elements.size());
                                                                                                                         for (Element ele : elements) {
                                                                                                                             result.add(ele.parent());
@@ -163,10 +167,10 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
                                                                             }
                                                                         });
 
-                                                            }else {
+                                                            } else {
                                                                 System.out.print("not found");
                                                             }
-                                                        }else {
+                                                        } else {
                                                             System.out.print("you should retry");
                                                         }
                                                     }

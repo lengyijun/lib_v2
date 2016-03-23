@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             tosend.getElementsByTag("noscript").remove();
             tosend.getElementsByClass("EXLResultAvailability").remove();
 
-            String url=Book_detail_dialog.base_url+doc.getElementsMatchingText("馆藏信息").attr("href");
+            String url= Book_detailDialog.base_url+doc.getElementsMatchingText("馆藏信息").attr("href");
             intent.setClass(MainActivity.this, Single_detail.class);
             intent.putExtra("detail", tosend.toString());
             intent.putExtra("url",url);
@@ -206,20 +206,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnItemClick(R.id.listView) void onItemSelected(int position){
-        Book_detail_dialog bookDetail=new Book_detail_dialog(book_elements.get(position));
+        Book_detailDialog bookDetail=new Book_detailDialog(book_elements.get(position));
         bookDetail.show(getFragmentManager(), "book");
     }
 
     public class NextAsyncTask extends MultiAsynctask<Void,Void,Void> {
         MainActivity activity;
         int saved_postion;
-        Loading_dialog dialog;
+        LoadingDialog dialog;
         Context context;
 
         public NextAsyncTask(MainActivity mainActivity) {
             this.activity=mainActivity;
             this.context=activity;
-            dialog=new Loading_dialog(mainActivity);
+            dialog=new LoadingDialog(mainActivity);
         }
 
         @Override

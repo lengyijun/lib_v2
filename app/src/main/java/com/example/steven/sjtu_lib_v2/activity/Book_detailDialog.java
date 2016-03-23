@@ -30,7 +30,7 @@ import okhttp3.Call;
 /**
  * Created by steven on 2016/2/6.
  */
-public class Book_detail_dialog extends DialogFragment{
+public class Book_detailDialog extends DialogFragment{
     @Bind(R.id.listView) ListView lv;
     @Bind(R.id.call_number)TextView call_num;
 
@@ -142,7 +142,7 @@ public class Book_detail_dialog extends DialogFragment{
                 });
     }
 
-    public Book_detail_dialog(Element element) {
+    public Book_detailDialog(Element element) {
         this.element=element;
     }
 }

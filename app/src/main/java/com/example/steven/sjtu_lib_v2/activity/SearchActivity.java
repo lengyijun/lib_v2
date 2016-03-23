@@ -15,9 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.alirezaafkar.toolbar.Toolbar;
 import com.example.steven.sjtu_lib_v2.R;
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappydbException;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -35,7 +39,7 @@ import okhttp3.Call;
 /**
  * Created by steven on 2016/2/7.
  */
-public class Search_activity extends AppCompatActivity
+public class SearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     @Bind(R.id.book_name)EditText et;
     @Bind(R.id.radio_button)RadioGroup radioGroup;
@@ -85,7 +89,7 @@ public class Search_activity extends AppCompatActivity
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent=new Intent();
-                intent.setClass(Search_activity.this,MyCollectionActivity.class);
+                intent.setClass(SearchActivity.this,MyCollectionActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -144,7 +148,7 @@ public class Search_activity extends AppCompatActivity
 
     private void direct_search(String url) {
         Intent intent=new Intent();
-        intent.setClass(Search_activity.this,MainActivity.class);
+        intent.setClass(SearchActivity.this,MainActivity.class);
         intent.putExtra("url",url);
         startActivity(intent);
     }
@@ -152,18 +156,31 @@ public class Search_activity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id=item.getItemId();
-        if(id==R.id.log_in){
+        if(id==R.id.myborrow){
             Intent intent=new Intent();
-            intent.setClass(Search_activity.this,MyBorrowActivity.class);
+            intent.setClass(SearchActivity.this,MyBorrowActivity.class);
             startActivity(intent);
         }else if(id==R.id.mycollection){
             Intent intent=new Intent();
-            intent.setClass(Search_activity.this,MyCollectionActivity.class);
+            intent.setClass(SearchActivity.this,MyCollectionActivity.class);
             startActivity(intent);
         }else if(id==R.id.borrowrank){
             Intent intent=new Intent();
-            intent.setClass(Search_activity.this,RankActivity.class);
+            intent.setClass(SearchActivity.this,RankActivity.class);
             startActivity(intent);
+        }else if (id == R.id.log_in) {
+            Intent intent=new Intent();
+            intent.setClass(SearchActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.log_out) {
+            try {
+                DB snappydb= DBFactory.open(getApplication(),"notvital");
+                snappydb.del("name");
+                snappydb.del("pass");
+                Toast.makeText(getApplicationContext(),"退出成功",Toast.LENGTH_SHORT).show();
+            } catch (SnappydbException e) {
+                e.printStackTrace();
+            }
         }
         return true;
     }

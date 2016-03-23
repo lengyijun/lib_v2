@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-    <activity android:name=".activity.Search_activity">
+    <activity android:name=".activity.SearchActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -21,6 +21,7 @@
     <activity android:name=".activity.MyCollectionActivity" />
     <activity android:name=".activity.MyBorrowActivity" />
     <activity android:name=".activity.RankActivity" />
+    <activity android:name=".activity.LoginActivity" />
 
 </application>
 </manifest>

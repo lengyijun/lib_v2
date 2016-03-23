@@ -9,9 +9,9 @@ import com.example.steven.sjtu_lib_v2.R;
 /**
  * Created by steven on 2016/2/15.
  */
-public class Loading_dialog extends ProgressDialog{
+public class LoadingDialog extends ProgressDialog{
 
-    public Loading_dialog(Context context) {
+    public LoadingDialog(Context context) {
         super(context);
     }
 

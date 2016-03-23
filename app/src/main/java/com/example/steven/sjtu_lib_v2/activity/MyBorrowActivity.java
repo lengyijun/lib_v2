@@ -3,11 +3,15 @@ package com.example.steven.sjtu_lib_v2.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.steven.sjtu_lib_v2.Login;
 import com.example.steven.sjtu_lib_v2.R;
 import com.example.steven.sjtu_lib_v2.Refresh_borrow;
 import com.example.steven.sjtu_lib_v2.adapter.MyBorrowAdapter;
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappydbException;
 
 import org.jsoup.nodes.Element;
 
@@ -30,12 +34,23 @@ public class MyBorrowActivity extends AppCompatActivity implements Refresh_borro
         setContentView(R.layout.activity_main2);
         ButterKnife.bind(this);
         try {
-            ArrayList<Element> elementArrayList=new Login(this).execute().get();
-            myBorrowAdapter=new MyBorrowAdapter(this,0,elementArrayList);
-            listView.setAdapter(myBorrowAdapter);
+            DB snappydb= DBFactory.open(getApplication(), "notvital");
+            String name=snappydb.get("name");
+            String pass=snappydb.get("pass");
+            if (name.length() == 0 || pass.length() == 0) {
+                Toast.makeText(getApplicationContext(),"尚未登陆",Toast.LENGTH_SHORT).show();
+            }else {
+                ArrayList<Element> elementArrayList=new Login(this,name,pass).execute().get();
+                myBorrowAdapter=new MyBorrowAdapter(this,0,elementArrayList);
+                listView.setAdapter(myBorrowAdapter);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (SnappydbException e) {
+            Toast.makeText(getApplicationContext(),"尚未登陆",Toast.LENGTH_SHORT).show();
+            finish();
             e.printStackTrace();
         }
     }
