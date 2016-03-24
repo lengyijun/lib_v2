@@ -19,8 +19,8 @@ public class RankActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rank_swipe);
         TabLayout tabLayout= (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
+        tabLayout.addTab(tabLayout.newTab().setText("最近一个月读者借阅排行"));
+        tabLayout.addTab(tabLayout.newTab().setText("最近一个月图书借阅排行"));
 
         final ViewPager viewPager= (ViewPager) findViewById(R.id.viewPager);
         final MyPagerAdapter adapter=new MyPagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount());

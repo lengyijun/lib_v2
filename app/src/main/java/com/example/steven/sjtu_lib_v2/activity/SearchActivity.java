@@ -3,9 +3,11 @@ package com.example.steven.sjtu_lib_v2.activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -28,6 +30,11 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -59,6 +66,11 @@ public class SearchActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
+
+        File file=new File(Environment.getExternalStorageDirectory()+"/tessdata","eng.traineddata");
+        if (! file.exists()) {
+            push_tranedeng_tosdcard();
+        }
 
         navigationView.setNavigationItemSelectedListener(this);
         db=openOrCreateDatabase("collection.db", Context.MODE_PRIVATE,null);
@@ -94,6 +106,59 @@ public class SearchActivity extends AppCompatActivity
                 return true;
             }
         });
+    }
+
+    private void push_tranedeng_tosdcard() {
+        File folder=new File(Environment.getExternalStorageDirectory()+"/tessdata");
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        AssetManager assetManager=getAssets();
+        String [] files=null;
+        try{
+            files=assetManager.list("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (files != null) {
+            for (String filename : files) {
+                InputStream in=null;
+                OutputStream out=null;
+                try {
+                    in=assetManager.open(filename);
+                    String path=Environment.getExternalStorageDirectory()+"/tessdata";
+                    File outfile=new File(path,filename);
+                    out=new FileOutputStream(outfile);
+                    copyFile(in,out);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (out != null) {
+                        try {
+                            out.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer=new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer,0,read);
+        }
     }
 
     @OnClick(R.id.search_button) void jump_to_search(){

@@ -20,6 +20,8 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.steven.sjtu_lib_v2.R;
 import com.example.steven.sjtu_lib_v2.adapter.BookItemAdapter;
+import com.example.steven.sjtu_lib_v2.dialog.BookDetailDialog;
+import com.example.steven.sjtu_lib_v2.dialog.LoadingDialog;
 import com.example.steven.sjtu_lib_v2.view.SuperSwipeRefreshLayout;
 import com.yolanda.multiasynctask.MultiAsynctask;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -146,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
             tosend.getElementsByTag("noscript").remove();
             tosend.getElementsByClass("EXLResultAvailability").remove();
 
-            String url= Book_detailDialog.base_url+doc.getElementsMatchingText("馆藏信息").attr("href");
-            intent.setClass(MainActivity.this, Single_detail.class);
+            String url= BookDetailDialog.base_url+doc.getElementsMatchingText("馆藏信息").attr("href");
+            intent.setClass(MainActivity.this, SingleDetailActivity.class);
             intent.putExtra("detail", tosend.toString());
             intent.putExtra("url",url);
             startActivity(intent);
@@ -206,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnItemClick(R.id.listView) void onItemSelected(int position){
-        Book_detailDialog bookDetail=new Book_detailDialog(book_elements.get(position));
+        BookDetailDialog bookDetail=new BookDetailDialog(book_elements.get(position));
         bookDetail.show(getFragmentManager(), "book");
     }
 

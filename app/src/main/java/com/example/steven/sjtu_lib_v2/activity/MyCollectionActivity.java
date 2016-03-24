@@ -46,7 +46,7 @@ public class MyCollectionActivity extends AppCompatActivity {
                 String url=cursor.getString(cursor.getColumnIndex("url"));
 
                 Intent intent=new Intent();
-                intent.setClass(MyCollectionActivity.this,Single_detail.class);
+                intent.setClass(MyCollectionActivity.this,SingleDetailActivity.class);
                 intent.putExtra("detail",name);
                 intent.putExtra("url",url);
                 startActivity(intent);
