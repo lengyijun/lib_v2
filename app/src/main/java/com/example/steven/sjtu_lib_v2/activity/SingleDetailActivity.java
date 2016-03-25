@@ -59,11 +59,10 @@ public class SingleDetailActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                SQLiteDatabase db=openOrCreateDatabase("collection.db", Context.MODE_PRIVATE,null);
+                db.execSQL("create table if not exists favourite (_id INTEGER PRIMARY KEY AUTOINCREMENT, book_name VARCHAR, url VARCHAR)");
                 switch (item.getItemId()){
                     case R.id.add_to_collection:
-                        SQLiteDatabase db=openOrCreateDatabase("collection.db", Context.MODE_PRIVATE,null);
-                        db.execSQL("create table if not exists favourite (_id INTEGER PRIMARY KEY AUTOINCREMENT, book_name VARCHAR, url VARCHAR)");
-
                         ContentValues cv=new ContentValues();
                         cv.put("book_name",detail_html);
                         cv.put("url",url);
@@ -72,7 +71,11 @@ public class SingleDetailActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"收藏成功",Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.remove_from_collection:
-                        Toast.makeText(getApplicationContext(),"remove frem collection",Toast.LENGTH_SHORT).show();
+                        if(db.delete("favourite","url=?",new String[]{url})>0){
+                            Toast.makeText(getApplicationContext(),"取消收藏成功",Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(getApplicationContext(),"你尚未收藏此书",Toast.LENGTH_SHORT).show();
+                        }
                         break;
                 }
                 return true;
