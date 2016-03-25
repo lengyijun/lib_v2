@@ -100,9 +100,13 @@ public class SearchActivity extends AppCompatActivity
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent=new Intent();
-                intent.setClass(SearchActivity.this,MyCollectionActivity.class);
-                startActivity(intent);
+                if (isFavouriteExist()) {
+                    Intent intent = new Intent();
+                    intent.setClass(SearchActivity.this, MyCollectionActivity.class);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(getApplicationContext(),"你尚未收藏任何一本书",Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
         });
@@ -213,8 +217,8 @@ public class SearchActivity extends AppCompatActivity
 
     private void direct_search(String url) {
         Intent intent=new Intent();
-        intent.setClass(SearchActivity.this,MainActivity.class);
-        intent.putExtra("url",url);
+        intent.setClass(SearchActivity.this, MainActivity.class);
+        intent.putExtra("url", url);
         startActivity(intent);
     }
 
@@ -225,10 +229,14 @@ public class SearchActivity extends AppCompatActivity
             Intent intent=new Intent();
             intent.setClass(SearchActivity.this,MyBorrowActivity.class);
             startActivity(intent);
-        }else if(id==R.id.mycollection){
-            Intent intent=new Intent();
-            intent.setClass(SearchActivity.this,MyCollectionActivity.class);
-            startActivity(intent);
+        }else if(id==R.id.mycollection) {
+            if (isFavouriteExist()) {
+                Intent intent = new Intent();
+                intent.setClass(SearchActivity.this, MyCollectionActivity.class);
+                startActivity(intent);
+            }else {
+                Toast.makeText(getApplicationContext(),"你尚未收藏任何一本书",Toast.LENGTH_SHORT).show();
+            }
         }else if(id==R.id.borrowrank){
             Intent intent=new Intent();
             intent.setClass(SearchActivity.this,RankActivity.class);
@@ -248,5 +256,15 @@ public class SearchActivity extends AppCompatActivity
             }
         }
         return true;
+    }
+
+    private boolean isFavouriteExist() {
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM sqlite_master WHERE type = ? AND name = ?", new String[] {"table","favourite"});
+        if(! cursor.moveToFirst()){
+            return false;
+        }
+        int count=cursor.getInt(0);
+        cursor.close();
+        return count>0;
     }
 }

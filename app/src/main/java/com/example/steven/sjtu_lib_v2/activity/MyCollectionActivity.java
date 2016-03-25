@@ -32,6 +32,7 @@ public class MyCollectionActivity extends AppCompatActivity {
 
         db=openOrCreateDatabase("collection.db", Context.MODE_PRIVATE,null);
 
+
         final CollectionAdapter adapter=new CollectionAdapter(this,0,get_data());
         lv.setAdapter(adapter);
 
@@ -59,18 +60,17 @@ public class MyCollectionActivity extends AppCompatActivity {
 
         Cursor cursor = db.rawQuery("select * from favourite", null);
         if (cursor .moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                String name = cursor.getString(cursor
+                        .getColumnIndex("book_name"));
+                String url= cursor.getString(cursor
+                        .getColumnIndex("url"));
+                int id=cursor.getInt(cursor.getColumnIndex("_id"));
 
-        while (cursor.isAfterLast() == false) {
-            String name = cursor.getString(cursor
-                    .getColumnIndex("book_name"));
-            String url= cursor.getString(cursor
-                    .getColumnIndex("url"));
-            int id=cursor.getInt(cursor.getColumnIndex("_id"));
+                CollectionBook book=new CollectionBook(id,name,url);
+                book_list.add(book);
 
-            CollectionBook book=new CollectionBook(id,name,url);
-            book_list.add(book);
-
-            cursor.moveToNext();
+                cursor.moveToNext();
             }
         }
         return book_list;

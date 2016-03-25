@@ -60,7 +60,7 @@ public class SingleDetailActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 SQLiteDatabase db=openOrCreateDatabase("collection.db", Context.MODE_PRIVATE,null);
-                db.execSQL("create table if not exists favourite (_id INTEGER PRIMARY KEY AUTOINCREMENT, book_name VARCHAR, url VARCHAR)");
+                db.execSQL("create table if not exists favourite (_id INTEGER PRIMARY KEY AUTOINCREMENT, book_name VARCHAR, url VARCHAR unique)");
                 switch (item.getItemId()){
                     case R.id.add_to_collection:
                         ContentValues cv=new ContentValues();
