@@ -26,10 +26,17 @@ public class CollectionAdapter extends ArrayAdapter<CollectionBook>{
         CollectionBook book=getItem(position);
 
         if(convertView==null){
-            convertView= LayoutInflater.from(getContext()).inflate(R.layout.list_white_text,null);
+            convertView= LayoutInflater.from(getContext()).inflate(R.layout.collectionitem,null);
         }
-        TextView tv= (TextView) convertView.findViewById(R.id.text1);
-        tv.setText(book.getShortName());
+        TextView tv_col_name= (TextView) convertView.findViewById(R.id.col_name);
+        TextView tv_col_author= (TextView) convertView.findViewById(R.id.col_author);
+        TextView tv_col_detail= (TextView) convertView.findViewById(R.id.col_details);
+        TextView tv_forth= (TextView) convertView.findViewById(R.id.fourthline);
+
+        tv_col_name.setText(book.getShortName());
+        tv_col_author.setText(book.getAuthor());
+        tv_col_detail.setText(book.getDetail());
+        tv_forth.setText(book.getForth());
         return convertView;
     }
 

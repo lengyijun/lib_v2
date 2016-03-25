@@ -30,4 +30,22 @@ public class CollectionBook {
     public int getId() {
         return id;
     }
+
+    public String getAuthor() {
+        Document document= Jsoup.parse(name);
+        String result=document.getElementsByClass("EXLResultAuthor").text();
+        return result;
+    }
+
+    public String getDetail() {
+        Document document= Jsoup.parse(name);
+        String result=document.getElementsByClass("EXLResultDetails").text();
+        return result;
+    }
+
+    public String getForth() {
+        Document document= Jsoup.parse(name);
+        String result=document.getElementsByClass("EXLResultFourthLine").text();
+        return result;
+    }
 }
