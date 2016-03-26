@@ -1,5 +1,6 @@
 package com.example.steven.sjtu_lib_v2.activity;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -34,6 +35,7 @@ import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 
 /**
@@ -65,6 +67,8 @@ public class SingleDetailActivity extends AppCompatActivity {
 
     TableAdapter adapter;
     List<Element> table_data = new ArrayList<Element>();
+    String bookInfo;
+    String authorInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +113,9 @@ public class SingleDetailActivity extends AppCompatActivity {
 
     private String get_html_from_intent() {
         String detail_html = getIntent().getExtras().getString("detail");
+        Document docuement=Jsoup.parse(detail_html);
+        tvBookAuthor.setText(docuement.getElementsByClass("EXLResultAuthor").text());
+        tvBookPublicer.setText(docuement.getElementsByClass("EXLResultFourthLine").text());
         return detail_html;
     }
 
@@ -153,7 +160,7 @@ public class SingleDetailActivity extends AppCompatActivity {
                                 .execute(new StringCallback() {
                                     @Override
                                     public void onError(Call call, Exception e) {
-
+                                        Toast.makeText(getApplicationContext(),"加载豆瓣数据失败",Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
@@ -167,6 +174,8 @@ public class SingleDetailActivity extends AppCompatActivity {
                                             tvBookTime.setText(jsonobect.getString("pubdate"));
                                             tvBookScore.setText(jsonobect.getJSONObject("rating").getString("average"));
                                             tvBookPage.setText(jsonobect.getString("pages"));
+                                            bookInfo=jsonobect.getString("summary");
+                                            authorInfo=jsonobect.getString("author_intro");
 
                                             String imageUrl = jsonobect.getString("image");
                                             OkHttpUtils.get()
@@ -175,7 +184,7 @@ public class SingleDetailActivity extends AppCompatActivity {
                                                     .execute(new BitmapCallback() {
                                                         @Override
                                                         public void onError(Call call, Exception e) {
-
+                                                            Toast.makeText(getApplicationContext(),"加载图片失败",Toast.LENGTH_SHORT).show();
                                                         }
 
                                                         @Override
@@ -198,5 +207,44 @@ public class SingleDetailActivity extends AppCompatActivity {
                                 });
                     }
                 });
+    }
+
+    @OnClick(R.id.iv_book_icon)
+    public void showBookInfo() {
+        if (bookInfo == null) {
+            new AlertDialog.Builder(SingleDetailActivity.this)
+                    .setTitle("图书信息")
+                    .setMessage("请稍等。。")
+                    .setPositiveButton("确认", null)
+                    .create()
+                    .show();
+        } else {
+            new AlertDialog.Builder(SingleDetailActivity.this)
+                    .setTitle("图书信息")
+                    .setMessage("请稍等。。")
+                    .setMessage(bookInfo)
+                    .setPositiveButton("确认",null)
+                    .create()
+                    .show();
+        }
+    }
+
+    @OnClick(R.id.tv_book_author)
+    public void showAuthorInfo() {
+        if (authorInfo == null) {
+            new AlertDialog.Builder(SingleDetailActivity.this)
+                    .setTitle("作者信息")
+                    .setMessage("请稍等。。。")
+                    .setPositiveButton("确认", null)
+                    .create()
+                    .show();
+        } else {
+            new AlertDialog.Builder(SingleDetailActivity.this)
+                    .setMessage(authorInfo)
+                    .setTitle("作者信息")
+                    .setPositiveButton("确认",null)
+                    .create()
+                    .show();
+        }
     }
 }
