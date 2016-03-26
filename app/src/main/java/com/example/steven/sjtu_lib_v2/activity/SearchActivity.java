@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alirezaafkar.toolbar.Toolbar;
@@ -53,6 +54,8 @@ public class SearchActivity extends AppCompatActivity
     @Bind(R.id.toolbar_search)Toolbar toolbar;
     @Bind(R.id.listView2)ListView lv;
     @Bind(R.id.nav_view)NavigationView navigationView;
+    TextView tvNaviTitle;
+    TextView tvNaviSubTitle;
 
     SQLiteDatabase db;
     String base_url="http://ourex.lib.sjtu.edu.cn/primo_library/libweb/action/search." +
@@ -66,6 +69,9 @@ public class SearchActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
+        View view=navigationView.inflateHeaderView(R.layout.nav_header_main);
+        tvNaviTitle= (TextView)view.findViewById(R.id.navi_title);
+        tvNaviSubTitle= (TextView)view.findViewById(R.id.navi_subtitle);
 
         File file=new File(Environment.getExternalStorageDirectory()+"/tessdata","eng.traineddata");
         if (! file.exists()) {
@@ -110,6 +116,24 @@ public class SearchActivity extends AppCompatActivity
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            DB snappydb= DBFactory.open(getApplication(), "notvital");
+            String jaccountName=snappydb.get("name");
+            if (jaccountName.length() != 0) {
+                tvNaviSubTitle.setText(jaccountName);
+            }
+            String realname=snappydb.get("realname");
+            if (realname.length() != 0) {
+                tvNaviTitle.setText(realname);
+            }
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
     }
 
     private void push_tranedeng_tosdcard() {
@@ -250,6 +274,7 @@ public class SearchActivity extends AppCompatActivity
                 DB snappydb= DBFactory.open(getApplication(),"notvital");
                 snappydb.del("name");
                 snappydb.del("pass");
+                snappydb.close();
                 Toast.makeText(getApplicationContext(),"退出成功",Toast.LENGTH_SHORT).show();
             } catch (SnappydbException e) {
                 e.printStackTrace();

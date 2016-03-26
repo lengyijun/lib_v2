@@ -1,9 +1,13 @@
 package com.example.steven.sjtu_lib_v2;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappydbException;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -27,11 +31,13 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
     private Refresh_borrow listener;
     private String name;
     private String pass;
+    private Context context;
 
-    public Login(Refresh_borrow listener,String name,String pass){
+    public Login(Refresh_borrow listener,String name,String pass,Context context){
         this.listener=listener;
         this.name=name;
         this.pass=pass;
+        this.context=context;
     }
 
     @Override
@@ -115,7 +121,6 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
                                                                             @Override
                                                                             public void onResponse(String response) {
                                                                                 System.out.println(response);
-                                                                                Document document = Jsoup.parse(response);
                                                                                 Pattern pattern = Pattern.compile("(?<=href=\").*func=bor-info");
                                                                                 Matcher matcher = pattern.matcher(response);
                                                                                 if (matcher.find()) {
@@ -134,7 +139,7 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
                                                                                                 public void onResponse(String response) {
                                                                                                     System.out.println(response);
                                                                                                     Pattern pattern = Pattern.compile("(?<=javascript:replacePage\\(').*func=bor-loan&adm_library=SJT50");
-                                                                                                    Matcher matcher = pattern.matcher(response);
+                                                                                                    final Matcher matcher = pattern.matcher(response);
                                                                                                     if (matcher.find()) {
                                                                                                         String url = matcher.group(0);
                                                                                                         OkHttpUtils.get()
@@ -149,12 +154,26 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
                                                                                                                     @Override
                                                                                                                     public void onResponse(String response) {
                                                                                                                         System.out.println(response);
+//                                                                                                                        .不能匹配换行符
+                                                                                                                        Pattern pattern1=Pattern.compile("(?<=在借书籍情况：).*");
+                                                                                                                        Matcher matcher1=pattern1.matcher(response);
+                                                                                                                        if(matcher1.find()){
+                                                                                                                            try {
+                                                                                                                                DB snappydb= DBFactory.open(context, "notvital");
+                                                                                                                                snappydb.put("realname",matcher1.group(0));
+                                                                                                                                System.out.print("<<<<........");
+                                                                                                                                System.out.print(matcher1.group(0));
+                                                                                                                            } catch (SnappydbException e) {
+                                                                                                                                e.printStackTrace();
+                                                                                                                            }
+                                                                                                                        }else {
+                                                                                                                            System.out.println("not found real name");
+                                                                                                                        }
                                                                                                                         Document document = Jsoup.parse(response);
                                                                                                                         elements = document.getElementsByAttributeValue("id", "centered");
                                                                                                                         System.out.println(elements.size());
                                                                                                                         for (Element ele : elements) {
                                                                                                                             result.add(ele.parent());
-                                                                                                                            System.out.println(ele.parent().toString());
                                                                                                                             listener.ontaskcompleted();
                                                                                                                         }
                                                                                                                     }

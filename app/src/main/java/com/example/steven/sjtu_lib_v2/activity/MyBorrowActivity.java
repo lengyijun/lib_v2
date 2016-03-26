@@ -40,7 +40,7 @@ public class MyBorrowActivity extends AppCompatActivity implements Refresh_borro
             if (name.length() == 0 || pass.length() == 0) {
                 Toast.makeText(getApplicationContext(),"尚未登陆",Toast.LENGTH_SHORT).show();
             }else {
-                ArrayList<Element> elementArrayList=new Login(this,name,pass).execute().get();
+                ArrayList<Element> elementArrayList=new Login(this,name,pass,getApplicationContext()).execute().get();
                 myBorrowAdapter=new MyBorrowAdapter(this,0,elementArrayList);
                 listView.setAdapter(myBorrowAdapter);
             }
