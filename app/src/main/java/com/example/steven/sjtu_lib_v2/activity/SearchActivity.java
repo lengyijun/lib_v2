@@ -9,7 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,7 +24,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alirezaafkar.toolbar.Toolbar;
 import com.example.steven.sjtu_lib_v2.R;
 import com.example.steven.sjtu_lib_v2.identicons.Identicon;
 import com.snappydb.DB;
@@ -54,12 +57,12 @@ public class SearchActivity extends AppCompatActivity
     EditText et;
     @Bind(R.id.radio_button)
     RadioGroup radioGroup;
-    @Bind(R.id.toolbar_search)
-    Toolbar toolbar;
     @Bind(R.id.listView2)
     ListView lv;
     @Bind(R.id.nav_view)
     NavigationView navigationView;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
 
     Identicon identicon;
     TextView tvNaviTitle;
@@ -76,11 +79,13 @@ public class SearchActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
+        Toolbar toolbar1 = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar1);
+//        getSupportActionBar().hide();
         View view = navigationView.inflateHeaderView(R.layout.nav_header_main);
         tvNaviTitle = (TextView) view.findViewById(R.id.navi_title);
         tvNaviSubTitle = (TextView) view.findViewById(R.id.navi_subtitle);
-        identicon= (Identicon) view.findViewById(R.id.identicon);
+        identicon = (Identicon) view.findViewById(R.id.identicon);
         identicon.show(System.currentTimeMillis());
 
         File file = new File(Environment.getExternalStorageDirectory() + "/tessdata", "eng.traineddata");
@@ -89,6 +94,11 @@ public class SearchActivity extends AppCompatActivity
         }
 
         navigationView.setNavigationItemSelectedListener(this);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this,drawerLayout, toolbar1, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+
         db = openOrCreateDatabase("collection.db", Context.MODE_PRIVATE, null);
         db.execSQL("create table if not exists search_history (_id INTEGER PRIMARY KEY AUTOINCREMENT, name text not null unique)");
         ArrayList<String> list = new ArrayList<String>();
@@ -113,19 +123,6 @@ public class SearchActivity extends AppCompatActivity
             }
         });
 
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (isFavouriteExist()) {
-                    Intent intent = new Intent();
-                    intent.setClass(SearchActivity.this, MyCollectionActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getApplicationContext(), "你尚未收藏任何一本书", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            }
-        });
     }
 
     @Override
@@ -304,4 +301,12 @@ public class SearchActivity extends AppCompatActivity
         cursor.close();
         return count > 0;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        return true;
+    }
+
 }

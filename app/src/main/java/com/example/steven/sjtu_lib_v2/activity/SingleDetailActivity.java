@@ -75,7 +75,6 @@ public class SingleDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_info);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
 
         adapter = new TableAdapter(getApplicationContext(), 0, table_data);
         lv_table.setAdapter(adapter);
