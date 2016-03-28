@@ -1,6 +1,5 @@
 package com.example.steven.sjtu_lib_v2.activity;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -9,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,24 +16,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.steven.sjtu_lib_v2.R;
 import com.example.steven.sjtu_lib_v2.identicons.Identicon;
+import com.lapism.searchview.adapter.SearchAdapter;
+import com.lapism.searchview.adapter.SearchItem;
+import com.lapism.searchview.view.SearchCodes;
+import com.lapism.searchview.view.SearchView;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
 import com.snappydb.SnappydbException;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,32 +37,32 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import okhttp3.Call;
+import butterknife.OnTouch;
 
 /**
  * Created by steven on 2016/2/7.
  */
 public class SearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    @Bind(R.id.book_name)
-    EditText et;
-    @Bind(R.id.radio_button)
-    RadioGroup radioGroup;
-    @Bind(R.id.listView2)
-    ListView lv;
     @Bind(R.id.nav_view)
     NavigationView navigationView;
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+    @Bind(R.id.searchView)
+    SearchView searchView;
+    @Bind(R.id.editText)
+    EditText editText;
 
     Identicon identicon;
     TextView tvNaviTitle;
     TextView tvNaviSubTitle;
 
+    private List<SearchItem> mSuggestionList;
+    private int mTheme= SearchCodes.THEME_LIGHT;
     SQLiteDatabase db;
     String base_url = "http://ourex.lib.sjtu.edu.cn/primo_library/libweb/action/search." +
             "do?fn=search&tab=default_tab&vid=chinese&scp.scps=scope%3A%28SJT%29%2Csc" +
@@ -95,7 +90,7 @@ public class SearchActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,drawerLayout, toolbar1, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawerLayout, toolbar1, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -111,18 +106,24 @@ public class SearchActivity extends AppCompatActivity
             }
         }
         Collections.reverse(list);
-        lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, list));
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String ss = (String) lv.getAdapter().getItem(position);
-                ContentValues cv = new ContentValues();
-                cv.put("name", ss);
-                db.insertWithOnConflict("search_history", null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-                direct_search(base_url + ss);
+            public boolean onQueryTextSubmit(String query) {
+                direct_search(base_url + query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
-
+        searchView.setOnSearchMenuListener(new SearchView.SearchMenuListener() {
+            @Override
+            public void onMenuClick() {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     @Override
@@ -197,57 +198,6 @@ public class SearchActivity extends AppCompatActivity
         }
     }
 
-    @OnClick(R.id.search_button)
-    void jump_to_search() {
-        String bookname = et.getText().toString();
-        final String url = base_url + bookname;
-
-        ContentValues cv = new ContentValues();
-        cv.put("name", bookname);
-        db.insertWithOnConflict("search_history", null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-
-        final int choosed_id = radioGroup.getCheckedRadioButtonId();
-        if (choosed_id == -1 || choosed_id == R.id.all_lib) {
-            direct_search(url);
-        } else {
-            OkHttpUtils.get()
-                    .url(url)
-                    .build()
-                    .execute(new StringCallback() {
-                        @Override
-                        public void onError(Call call, Exception e) {
-
-                        }
-
-                        @Override
-                        public void onResponse(String response) {
-                            Document doc = Jsoup.parse(response);
-                            String url_to_intent = null;
-                            switch (choosed_id) {
-                                case R.id.new_lib:
-                                    url_to_intent = doc.getElementsMatchingText("主馆图书").attr("href");
-                                    break;
-                                case R.id.baotu:
-                                    url_to_intent = doc.getElementsMatchingText("包玉刚图书馆图书").attr("href");
-                                    break;
-                                case R.id.subscribing:
-                                    url_to_intent = doc.getElementsMatchingText("正在订购").attr("href");
-                                    break;
-                                case R.id.xuhui:
-                                    url_to_intent = doc.getElementsMatchingText("徐汇社科馆").attr("href");
-                                    break;
-                                case R.id.literature:
-                                    url_to_intent = doc.getElementsMatchingText("人文学院分馆").attr("href");
-                                    break;
-
-                            }
-                            direct_search(url_to_intent);
-
-                        }
-                    });
-        }
-    }
-
     private void direct_search(String url) {
         Intent intent = new Intent();
         intent.setClass(SearchActivity.this, MainActivity.class);
@@ -303,10 +253,31 @@ public class SearchActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        mSuggestionList=new ArrayList<>();
+        mSuggestionList.add(new SearchItem("go"));
+        mSuggestionList.add(new SearchItem("nodejs"));
+        mSuggestionList.add(new SearchItem("vim"));
+        mSuggestionList.add(new SearchItem("hexo"));
+        List<SearchItem> mReasultList=new ArrayList<>();
+        SearchAdapter mSearchAdapter=new SearchAdapter(this,mReasultList,mSuggestionList,mTheme);
+        super.onStart();
+        searchView.setAdapter(mSearchAdapter);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
         return true;
+    }
+
+    @OnTouch(R.id.editText)
+    public boolean showLapism() {
+        searchView.setVisibility(View.VISIBLE);
+        editText.setVisibility(View.INVISIBLE);
+        searchView.requestFocus();
+        return false;
     }
 
 }

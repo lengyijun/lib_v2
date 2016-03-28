@@ -13,6 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.lapism.searchview.view.SearchView
+        android:id="@+id/searchView"
+        app:search_version = "toolbar"
+        app:search_style = "toolbar_classic"
+        app:search_theme = "light"
+        app:search_divider = "true"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

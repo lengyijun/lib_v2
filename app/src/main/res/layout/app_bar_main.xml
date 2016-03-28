@@ -21,6 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/search" />
+    <include layout="@layout/search_useless"/>
 
 </android.support.design.widget.CoordinatorLayout>
