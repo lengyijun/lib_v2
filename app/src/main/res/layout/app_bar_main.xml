@@ -21,6 +21,27 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/search_useless"/>
+    <!--<include layout="@layout/search_useless"/>-->
+
+    <RelativeLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/sjtulibscap"
+        android:id="@+id/imageView"
+        android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:layout_below="@id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_gravity="center_horizontal" />
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

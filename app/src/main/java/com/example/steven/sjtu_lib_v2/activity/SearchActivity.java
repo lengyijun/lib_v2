@@ -1,5 +1,6 @@
 package com.example.steven.sjtu_lib_v2.activity;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -36,7 +37,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -96,19 +96,12 @@ public class SearchActivity extends AppCompatActivity
 
         db = openOrCreateDatabase("collection.db", Context.MODE_PRIVATE, null);
         db.execSQL("create table if not exists search_history (_id INTEGER PRIMARY KEY AUTOINCREMENT, name text not null unique)");
-        ArrayList<String> list = new ArrayList<String>();
-        Cursor cursor = db.rawQuery("select * from search_history", null);
-        if (cursor.moveToFirst()) {
-            while (cursor.isAfterLast() == false) {
-                String name = cursor.getString(cursor.getColumnIndex("name"));
-                list.add(name);
-                cursor.moveToNext();
-            }
-        }
-        Collections.reverse(list);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                ContentValues cv=new ContentValues();
+                cv.put("name",query);
+                db.insertWithOnConflict("search_history", null, cv, SQLiteDatabase.CONFLICT_REPLACE);
                 direct_search(base_url + query);
                 return false;
             }
@@ -254,13 +247,31 @@ public class SearchActivity extends AppCompatActivity
 
     @Override
     protected void onStart() {
+        List<SearchItem> list = new ArrayList<>();
+        Cursor cursor = db.rawQuery("select * from search_history", null);
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                list.add(new SearchItem(name));
+                cursor.moveToNext();
+            }
+        }
         mSuggestionList=new ArrayList<>();
+        mSuggestionList.addAll(list);
         mSuggestionList.add(new SearchItem("go"));
         mSuggestionList.add(new SearchItem("nodejs"));
         mSuggestionList.add(new SearchItem("vim"));
         mSuggestionList.add(new SearchItem("hexo"));
         List<SearchItem> mReasultList=new ArrayList<>();
         SearchAdapter mSearchAdapter=new SearchAdapter(this,mReasultList,mSuggestionList,mTheme);
+        mSearchAdapter.setOnItemClickListener(new SearchAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                TextView textview= (TextView) view.findViewById(R.id.textView_item_text);
+                String name=textview.getText().toString();
+                direct_search(base_url+name);
+            }
+        });
         super.onStart();
         searchView.setAdapter(mSearchAdapter);
     }
@@ -275,7 +286,6 @@ public class SearchActivity extends AppCompatActivity
     @OnTouch(R.id.editText)
     public boolean showLapism() {
         searchView.setVisibility(View.VISIBLE);
-        editText.setVisibility(View.INVISIBLE);
         searchView.requestFocus();
         return false;
     }
