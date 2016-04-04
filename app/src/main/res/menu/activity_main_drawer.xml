@@ -15,9 +15,9 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="借阅排名" />
         <item
-            android:id="@+id/newbookinfo"
+            android:id="@+id/history"
             android:icon="@drawable/ic_menu_manage"
-            android:title="新书通报" />
+            android:title="历史记录" />
     </group>
 
     <item android:title="Communicate">

@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar footerProgressBar;
     ImageView footerImageView;
     TextView footerTextView;
-
     String url;
 
     String NextUrls;

@@ -161,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+            System.out.println("result is:"+result);
             return result;
         }
 

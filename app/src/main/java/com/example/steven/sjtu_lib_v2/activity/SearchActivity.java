@@ -217,6 +217,11 @@ public class SearchActivity extends AppCompatActivity
             Intent intent = new Intent();
             intent.setClass(SearchActivity.this, RankActivity.class);
             startActivity(intent);
+        } else if (id ==R.id.history)  {
+            Intent intent = new Intent();
+
+            intent.setClass(SearchActivity.this, HistoryActivity.class);
+            startActivity(intent);
         } else if (id == R.id.log_in) {
             Intent intent = new Intent();
             intent.setClass(SearchActivity.this, LoginActivity.class);
