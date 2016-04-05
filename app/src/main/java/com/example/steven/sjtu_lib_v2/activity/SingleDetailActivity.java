@@ -45,8 +45,6 @@ import okhttp3.Call;
 public class SingleDetailActivity extends AppCompatActivity {
     @Bind(R.id.listview_table)
     ListView lv_table;
-    //    @Bind(R.id.toolbar)
-//    Toolbar toolbar;
     @Bind(R.id.tv_book_author)
     TextView tvBookAuthor;
     @Bind(R.id.tv_book_time)
