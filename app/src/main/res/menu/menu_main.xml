@@ -18,4 +18,15 @@
         </menu>
     </item>
 
+    <item
+        android:title="share"
+        android:icon="@android:drawable/ic_menu_share"
+        android:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/share"
+                android:title="分享"/>
+        </menu>
+    </item>
+
 </menu>

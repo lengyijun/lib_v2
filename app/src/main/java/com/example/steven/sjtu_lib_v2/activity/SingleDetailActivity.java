@@ -3,6 +3,7 @@ package com.example.steven.sjtu_lib_v2.activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -71,6 +72,7 @@ public class SingleDetailActivity extends AppCompatActivity {
     List<Element> table_data = new ArrayList<Element>();
     String bookInfo;
     String authorInfo;
+    String url = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,7 @@ public class SingleDetailActivity extends AppCompatActivity {
         lv_table.setAdapter(adapter);
 
         final String detail_html = get_html_from_intent();
-        final String url = get_url_from_intent();
+        url= get_url_from_intent();
         get_table_data(url);
 
         toolbar.inflateMenu(R.menu.menu_main);
@@ -93,20 +95,27 @@ public class SingleDetailActivity extends AppCompatActivity {
                 db.execSQL("create table if not exists favourite (_id INTEGER PRIMARY KEY AUTOINCREMENT, book_name VARCHAR, url VARCHAR unique)");
                 switch (item.getItemId()) {
                     case R.id.add_to_collection:
-                    ContentValues cv = new ContentValues();
-                    cv.put("book_name", detail_html);
-                    cv.put("url", url);
-                    db.insert("favourite", null, cv);
+                        ContentValues cv = new ContentValues();
+                        cv.put("book_name", detail_html);
+                        cv.put("url", url);
+                        db.insert("favourite", null, cv);
 
-                    Toast.makeText(getApplicationContext(), "收藏成功", Toast.LENGTH_SHORT).show();
-                    break;
+                        Toast.makeText(getApplicationContext(), "收藏成功", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.remove_from_collection:
-                    if (db.delete("favourite", "url=?", new String[]{url}) > 0) {
-                        Toast.makeText(getApplicationContext(), "取消收藏成功", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "你尚未收藏此书", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
+                        if (db.delete("favourite", "url=?", new String[]{url}) > 0) {
+                            Toast.makeText(getApplicationContext(), "取消收藏成功", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "你尚未收藏此书", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case R.id.share:
+                        Intent intent=new Intent();
+                        intent.setAction(Intent.ACTION_SEND);
+                        intent.putExtra(Intent.EXTRA_TEXT,url);
+                        intent.setType("text/plain");
+                        startActivity(intent);
+                        break;
                 }
                 return true;
             }
