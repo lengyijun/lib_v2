@@ -31,7 +31,7 @@ public class MyBorrowActivity extends AppCompatActivity implements Refresh_borro
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.myborrow_drawer);
         ButterKnife.bind(this);
         try {
             DB snappydb= DBFactory.open(getApplication(), "notvital");

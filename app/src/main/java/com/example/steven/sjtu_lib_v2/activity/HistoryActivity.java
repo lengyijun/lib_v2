@@ -28,10 +28,11 @@ public class HistoryActivity extends AppCompatActivity implements Refresh_borrow
     @Bind(R.id.listview_history)ListView listView;
     HistoryAdapter HistoryAdapter;
     ArrayList<Element> data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.histroy);
+        setContentView(R.layout.history_drawer);
         ButterKnife.bind(this);
         try {
             DB snappydb = DBFactory.open(getApplication(), "notvital");

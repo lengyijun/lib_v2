@@ -27,7 +27,7 @@ public class MyCollectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.collection_drawer);
         ButterKnife.bind(this);
 
         db=openOrCreateDatabase("collection.db", Context.MODE_PRIVATE,null);

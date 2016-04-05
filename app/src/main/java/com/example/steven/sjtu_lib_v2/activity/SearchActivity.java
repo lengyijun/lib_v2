@@ -76,7 +76,6 @@ public class SearchActivity extends AppCompatActivity
         ButterKnife.bind(this);
         Toolbar toolbar1 = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar1);
-//        getSupportActionBar().hide();
         View view = navigationView.inflateHeaderView(R.layout.nav_header_main);
         tvNaviTitle = (TextView) view.findViewById(R.id.navi_title);
         tvNaviSubTitle = (TextView) view.findViewById(R.id.navi_subtitle);

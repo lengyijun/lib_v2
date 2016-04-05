@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,28 +42,31 @@ import butterknife.OnItemClick;
 import okhttp3.Call;
 
 public class MainActivity extends AppCompatActivity {
-    @Bind(R.id.swipe_refresh)SuperSwipeRefreshLayout superSwipeRefreshLayout;
-    @Bind(R.id.listView)SwipeMenuListView plistiview;
+    @Bind(R.id.swipe_refresh)
+    SuperSwipeRefreshLayout superSwipeRefreshLayout;
+    @Bind(R.id.listView)
+    SwipeMenuListView plistiview;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
-//    footerview
+    //    footerview
     ProgressBar footerProgressBar;
     ImageView footerImageView;
     TextView footerTextView;
     String url;
 
     String NextUrls;
-    public List<Element> book_elements=new ArrayList<Element>();
+    public List<Element> book_elements = new ArrayList<Element>();
     BookItemAdapter bookItemAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.result);
+        setContentView(R.layout.searchresult_coordin);
         ButterKnife.bind(this);
 
         get_intent_extra();
         plistview_init();
         superSwipelayout_init();
-
         get_list_from_url(url);
     }
 
@@ -108,10 +112,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void plistview_init() {
-        SwipeMenuCreator creator=new SwipeMenuCreator() {
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
             @Override
             public void create(SwipeMenu menu) {
-                SwipeMenuItem more_info=new SwipeMenuItem(getApplicationContext());
+                SwipeMenuItem more_info = new SwipeMenuItem(getApplicationContext());
                 more_info.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9, 0xCE)));
                 more_info.setWidth(dp2px(90));
                 more_info.setTitle("详细信息");
@@ -121,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         plistiview.setMenuCreator(creator);
-        bookItemAdapter=new BookItemAdapter(this, 0, book_elements);
+        bookItemAdapter = new BookItemAdapter(this, 0, book_elements);
         plistiview.setAdapter(bookItemAdapter);
         plistiview.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
@@ -136,37 +140,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void show_detail_info(int position) {
-        Element doc=book_elements.get(position);
+        Element doc = book_elements.get(position);
 //       多版本的处理
-        Elements MultipleLink=doc.getElementsByClass("EXLBriefResultsDisplayMultipleLink");
-        Intent intent=new Intent();
+        Elements MultipleLink = doc.getElementsByClass("EXLBriefResultsDisplayMultipleLink");
+        Intent intent = new Intent();
 
-        if(MultipleLink.isEmpty()){
-            Element tosend=doc.getElementsByClass("EXLSummaryContainer").first();
+        if (MultipleLink.isEmpty()) {
+            Element tosend = doc.getElementsByClass("EXLSummaryContainer").first();
             tosend.getElementsByTag("script").remove();
             tosend.getElementsByTag("noscript").remove();
             tosend.getElementsByClass("EXLResultAvailability").remove();
 
-            String url= BookDetailDialog.base_url+doc.getElementsMatchingText("馆藏信息").attr("href");
+            String url = BookDetailDialog.base_url + doc.getElementsMatchingText("馆藏信息").attr("href");
             intent.setClass(MainActivity.this, SingleDetailActivity.class);
             intent.putExtra("detail", tosend.toString());
-            intent.putExtra("url",url);
+            intent.putExtra("url", url);
             startActivity(intent);
-        }else {
-            intent.setClass(MainActivity.this,MainActivity.class);
-            intent.putExtra("url",MultipleLink.attr("href"));
+        } else {
+            intent.setClass(MainActivity.this, MainActivity.class);
+            intent.putExtra("url", MultipleLink.attr("href"));
             startActivity(intent);
         }
     }
 
     private void get_intent_extra() {
-        String url_intent=getIntent().getExtras().getString("url");
-        this.url=url_intent;
+        String url_intent = getIntent().getExtras().getString("url");
+        this.url = url_intent;
     }
 
     private View createFootview() {
-        View footerView= LayoutInflater.from(superSwipeRefreshLayout.getContext())
-            .inflate(R.layout.layout_footer,null);
+        View footerView = LayoutInflater.from(superSwipeRefreshLayout.getContext())
+                .inflate(R.layout.layout_footer, null);
         footerProgressBar = (ProgressBar) footerView
                 .findViewById(R.id.footer_pb_view);
         footerImageView = (ImageView) footerView
@@ -181,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void get_list_from_url(String url) {
-        OkHttpUtils .get()
+        OkHttpUtils.get()
                 .url(url)
                 .build()
                 .execute(new StringCallback() {
@@ -206,21 +210,22 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    @OnItemClick(R.id.listView) void onItemSelected(int position){
-        BookDetailDialog bookDetail=new BookDetailDialog(book_elements.get(position));
+    @OnItemClick(R.id.listView)
+    void onItemSelected(int position) {
+        BookDetailDialog bookDetail = new BookDetailDialog(book_elements.get(position));
         bookDetail.show(getFragmentManager(), "book");
     }
 
-    public class NextAsyncTask extends MultiAsynctask<Void,Void,Void> {
+    public class NextAsyncTask extends MultiAsynctask<Void, Void, Void> {
         MainActivity activity;
         int saved_postion;
         LoadingDialog dialog;
         Context context;
 
         public NextAsyncTask(MainActivity mainActivity) {
-            this.activity=mainActivity;
-            this.context=activity;
-            dialog=new LoadingDialog(mainActivity);
+            this.activity = mainActivity;
+            this.context = activity;
+            dialog = new LoadingDialog(mainActivity);
         }
 
         @Override
@@ -232,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Void onTask(Void... params) {
-            synchronized (this){
+            synchronized (this) {
                 while (NextUrls.length() == 0 || book_elements.size() == 0) {
                     try {
                         Thread.sleep(1000);
@@ -248,25 +253,25 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPrepare() {
-            saved_postion=plistiview.getFirstVisiblePosition();
+            saved_postion = plistiview.getFirstVisiblePosition();
             dialog.show();
         }
     }
 
-    private class Refrsh_next_url extends MultiAsynctask<Object,Void,Elements>{
+    private class Refrsh_next_url extends MultiAsynctask<Object, Void, Elements> {
 
         @Override
         public Elements onTask(Object... objects) {
-            Element come_in= (Element) objects[0];
-            Elements elements=come_in .getElementsByAttributeValue("title", "下一页");
+            Element come_in = (Element) objects[0];
+            Elements elements = come_in.getElementsByAttributeValue("title", "下一页");
             return elements;
         }
 
         @Override
-        public void  onResult(Elements elements) {
+        public void onResult(Elements elements) {
             bookItemAdapter.notifyDataSetChanged();
-            if(elements.size()!=0){
-                NextUrls=elements.first().attr("href");
+            if (elements.size() != 0) {
+                NextUrls = elements.first().attr("href");
             }
         }
 
