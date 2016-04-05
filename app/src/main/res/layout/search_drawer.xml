@@ -9,7 +9,7 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_main"
+        layout="@layout/search_coordin"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -20,6 +20,8 @@
         app:search_theme = "light"
         app:search_divider = "true"
         android:visibility="invisible"
+        app:search_voice = "true"
+        app:search_voice_text = "Voice text"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -29,8 +31,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:search_voice = "true"
-        app:search_voice_text = "Voice text"
         app:menu="@menu/activity_main_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

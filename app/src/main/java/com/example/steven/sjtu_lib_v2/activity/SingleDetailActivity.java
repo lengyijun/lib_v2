@@ -7,13 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alirezaafkar.toolbar.Toolbar;
 import com.example.steven.sjtu_lib_v2.R;
 import com.example.steven.sjtu_lib_v2.adapter.TableAdapter;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -44,8 +44,8 @@ import okhttp3.Call;
 public class SingleDetailActivity extends AppCompatActivity {
     @Bind(R.id.listview_table)
     ListView lv_table;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
+    //    @Bind(R.id.toolbar)
+//    Toolbar toolbar;
     @Bind(R.id.tv_book_author)
     TextView tvBookAuthor;
     @Bind(R.id.tv_book_time)
@@ -64,6 +64,8 @@ public class SingleDetailActivity extends AppCompatActivity {
     TextView tvBookTag;
     @Bind(R.id.iv_book_icon)
     ImageView ivBookIcon;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     TableAdapter adapter;
     List<Element> table_data = new ArrayList<Element>();
@@ -73,7 +75,7 @@ public class SingleDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.single_info);
+        setContentView(R.layout.single_drawer);
         ButterKnife.bind(this);
 
         adapter = new TableAdapter(getApplicationContext(), 0, table_data);
@@ -83,6 +85,7 @@ public class SingleDetailActivity extends AppCompatActivity {
         final String url = get_url_from_intent();
         get_table_data(url);
 
+        toolbar.inflateMenu(R.menu.menu_main);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -90,29 +93,30 @@ public class SingleDetailActivity extends AppCompatActivity {
                 db.execSQL("create table if not exists favourite (_id INTEGER PRIMARY KEY AUTOINCREMENT, book_name VARCHAR, url VARCHAR unique)");
                 switch (item.getItemId()) {
                     case R.id.add_to_collection:
-                        ContentValues cv = new ContentValues();
-                        cv.put("book_name", detail_html);
-                        cv.put("url", url);
-                        db.insert("favourite", null, cv);
+                    ContentValues cv = new ContentValues();
+                    cv.put("book_name", detail_html);
+                    cv.put("url", url);
+                    db.insert("favourite", null, cv);
 
-                        Toast.makeText(getApplicationContext(), "收藏成功", Toast.LENGTH_SHORT).show();
-                        break;
+                    Toast.makeText(getApplicationContext(), "收藏成功", Toast.LENGTH_SHORT).show();
+                    break;
                     case R.id.remove_from_collection:
-                        if (db.delete("favourite", "url=?", new String[]{url}) > 0) {
-                            Toast.makeText(getApplicationContext(), "取消收藏成功", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "你尚未收藏此书", Toast.LENGTH_SHORT).show();
-                        }
-                        break;
+                    if (db.delete("favourite", "url=?", new String[]{url}) > 0) {
+                        Toast.makeText(getApplicationContext(), "取消收藏成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "你尚未收藏此书", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
                 }
                 return true;
             }
         });
+
     }
 
     private String get_html_from_intent() {
         String detail_html = getIntent().getExtras().getString("detail");
-        Document docuement=Jsoup.parse(detail_html);
+        Document docuement = Jsoup.parse(detail_html);
         tvBookAuthor.setText(docuement.getElementsByClass("EXLResultAuthor").text());
         tvBookPublicer.setText(docuement.getElementsByClass("EXLResultFourthLine").text());
         return detail_html;
@@ -159,7 +163,7 @@ public class SingleDetailActivity extends AppCompatActivity {
                                 .execute(new StringCallback() {
                                     @Override
                                     public void onError(Call call, Exception e) {
-                                        Toast.makeText(getApplicationContext(),"加载豆瓣数据失败",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "加载豆瓣数据失败", Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
@@ -173,8 +177,8 @@ public class SingleDetailActivity extends AppCompatActivity {
                                             tvBookTime.setText(jsonobect.getString("pubdate"));
                                             tvBookScore.setText(jsonobect.getJSONObject("rating").getString("average"));
                                             tvBookPage.setText(jsonobect.getString("pages"));
-                                            bookInfo=jsonobect.getString("summary");
-                                            authorInfo=jsonobect.getString("author_intro");
+                                            bookInfo = jsonobect.getString("summary");
+                                            authorInfo = jsonobect.getString("author_intro");
 
                                             String imageUrl = jsonobect.getString("image");
                                             OkHttpUtils.get()
@@ -183,7 +187,7 @@ public class SingleDetailActivity extends AppCompatActivity {
                                                     .execute(new BitmapCallback() {
                                                         @Override
                                                         public void onError(Call call, Exception e) {
-                                                            Toast.makeText(getApplicationContext(),"加载图片失败",Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(), "加载图片失败", Toast.LENGTH_SHORT).show();
                                                         }
 
                                                         @Override
@@ -191,12 +195,12 @@ public class SingleDetailActivity extends AppCompatActivity {
                                                             ivBookIcon.setImageBitmap(response);
                                                         }
                                                     });
-                                            JSONArray jsonarray=jsonobect.getJSONArray("tags");
-                                            String tagContent="";
+                                            JSONArray jsonarray = jsonobect.getJSONArray("tags");
+                                            String tagContent = "";
                                             for (int i = 0; i < jsonarray.length(); i++) {
-                                                JSONObject object=jsonarray.getJSONObject(i);
-                                                tagContent+=object.getString("title");
-                                                tagContent+=",";
+                                                JSONObject object = jsonarray.getJSONObject(i);
+                                                tagContent += object.getString("title");
+                                                tagContent += ",";
                                             }
                                             tvBookTag.setText(tagContent);
                                         } catch (JSONException e) {
@@ -222,7 +226,7 @@ public class SingleDetailActivity extends AppCompatActivity {
                     .setTitle("图书信息")
                     .setMessage("请稍等。。")
                     .setMessage(bookInfo)
-                    .setPositiveButton("确认",null)
+                    .setPositiveButton("确认", null)
                     .create()
                     .show();
         }
@@ -241,7 +245,7 @@ public class SingleDetailActivity extends AppCompatActivity {
             new AlertDialog.Builder(SingleDetailActivity.this)
                     .setMessage(authorInfo)
                     .setTitle("作者信息")
-                    .setPositiveButton("确认",null)
+                    .setPositiveButton("确认", null)
                     .create()
                     .show();
         }
