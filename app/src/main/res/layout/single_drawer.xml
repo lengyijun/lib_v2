@@ -9,7 +9,7 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/single_coordin"
+        layout="@layout/single_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

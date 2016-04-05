@@ -128,6 +128,7 @@ public class SingleDetailActivity extends AppCompatActivity {
         Document docuement = Jsoup.parse(detail_html);
         tvBookAuthor.setText(docuement.getElementsByClass("EXLResultAuthor").text());
         tvBookPublicer.setText(docuement.getElementsByClass("EXLResultFourthLine").text());
+        toolbar.setTitle(docuement.getElementsByClass("EXLResultTitle").text());
         return detail_html;
     }
 

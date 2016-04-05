@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.searchresult_coordin);
+        setContentView(R.layout.result);
         ButterKnife.bind(this);
 
         get_intent_extra();
@@ -206,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         MainActivity.this.setTitle("已加载了" + book_elements.size() + "本书");
+                        toolbar.setTitle("已加载了" + book_elements.size() + "本书");
                     }
                 });
     }
