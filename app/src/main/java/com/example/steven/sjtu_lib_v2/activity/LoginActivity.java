@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             OkHttpUtils.get()
-                .url("http://opac.lib.sjtu.edu.cn:8118/sjt-local/opac-login.jsp")
+                .url("http://electsys.sjtu.edu.cn/edu/login.aspx")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -89,7 +89,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(String response) {
-                        System.out.println(response.length());
+                        System.out.println("length: "+response.length());
+
                         final Document doc = Jsoup.parse(response);
                         final String sid = doc.getElementsByAttributeValueMatching("name", "sid").first().attr("value").toString();
                         final String returl = doc.getElementsByAttributeValueMatching("name", "returl").first().attr("value").toString();
