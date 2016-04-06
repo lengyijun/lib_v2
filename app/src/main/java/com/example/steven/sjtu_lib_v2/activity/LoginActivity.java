@@ -28,6 +28,11 @@ import okhttp3.Call;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
+    // UI references.
+    private AutoCompleteTextView mEmailView;
+    private EditText mPasswordView;
+
+    VarifyLog varifyLog;
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -45,23 +50,29 @@ public class LoginActivity extends AppCompatActivity {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
 
-    // UI references.
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        varifyLog=new VarifyLog();
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
-
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new VarifyLog().execute();
+                if (varifyLog.getStatus() == AsyncTask.Status.FINISHED) {
+                    varifyLog = new VarifyLog();
+                    varifyLog.execute();
+                } else if (varifyLog.getStatus() == AsyncTask.Status.PENDING) {
+                    varifyLog.execute();
+                } else {
+                    Toast.makeText(getApplicationContext(),"请等待",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
