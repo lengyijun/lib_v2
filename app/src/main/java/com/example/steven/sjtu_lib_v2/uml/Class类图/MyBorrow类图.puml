@@ -1,0 +1,10 @@
+@startuml
+
+class MyBorrowActivity
+interface RefreshBorrowInterface
+
+RefreshBorrowInterface <|-- MyBorrowActivity
+
+RefreshBorrowInterface <- MyBorrowAsy
+
+@enduml

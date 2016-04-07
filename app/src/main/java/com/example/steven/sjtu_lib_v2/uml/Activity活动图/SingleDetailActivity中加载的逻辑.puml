@@ -1,0 +1,10 @@
+@startuml
+(*)  --> "用jsoup搜索class为EXLLocationTableColumn1的element"
+If "搜索不为空" then
+--> [Yes\n只在一个图书馆有] "直接加载数据"
+--> "刷新ui"
+-->(*)
+else
+--> [No\n在多个馆都有收藏] "从各个链接分别加载数据"
+--> "刷新ui"
+@enduml

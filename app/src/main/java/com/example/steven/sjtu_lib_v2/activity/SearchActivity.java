@@ -219,7 +219,7 @@ public class SearchActivity extends AppCompatActivity
         } else if (id ==R.id.history)  {
             Intent intent = new Intent();
 
-            intent.setClass(SearchActivity.this, HistoryActivity.class);
+            intent.setClass(SearchActivity.this, MyHistoryActivity.class);
             startActivity(intent);
         } else if (id == R.id.log_in) {
             Intent intent = new Intent();

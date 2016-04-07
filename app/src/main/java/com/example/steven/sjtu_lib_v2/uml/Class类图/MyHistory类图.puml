@@ -1,0 +1,10 @@
+@startuml
+
+class MyHistoryActivity
+interface RefreshBorrowInterface
+
+RefreshBorrowInterface <|-- MyHistoryActivity
+
+RefreshBorrowInterface <- MyHistoryAsy
+
+@enduml

@@ -23,6 +23,6 @@
     <activity android:name=".activity.MyBorrowActivity" />
     <activity android:name=".activity.RankActivity" />
     <activity android:name=".activity.LoginActivity" />
-    <activity android:name=".activity.HistoryActivity" />
+    <activity android:name=".activity.MyHistoryActivity" />
 </application>
 </manifest>

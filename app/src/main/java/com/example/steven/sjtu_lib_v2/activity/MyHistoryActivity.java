@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 /**
  * Created by zcw on 16/4/1.
  */
-public class HistoryActivity extends AppCompatActivity implements RefreshBorrowInterface {
+public class MyHistoryActivity extends AppCompatActivity implements RefreshBorrowInterface {
     @Bind(R.id.listview_history)ListView listView;
     HistoryAdapter HistoryAdapter;
     ArrayList<Element> data;
