@@ -37,7 +37,6 @@ public class BookDetailDialog extends DialogFragment{
     public static String base_url="http://ourex.lib.sjtu.edu.cn/primo_library/libweb/action/";
     String book_name;
     Element element;
-    List<String> out_in =new ArrayList<String>();
     List<Element> loc_sta=new ArrayList<Element>();
 
     @Override
@@ -47,7 +46,6 @@ public class BookDetailDialog extends DialogFragment{
         View view=inflater.inflate(R.layout.location_info,null);
         ButterKnife.bind(this,view);
 
-//        lv.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_white_text, out_in));
         DialogAdapter dialog_adapter=new DialogAdapter(getActivity(),0,loc_sta);
         lv.setAdapter(dialog_adapter);
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity())
@@ -84,9 +82,6 @@ public class BookDetailDialog extends DialogFragment{
                                     loc_sta.add(i.parent());
                                 }
                                 get_call_number_singlelib(document);
-//                                for (Element i : elements) {
-//                                    out_in.add(i.text());
-//                                }
                                 lv.invalidateViews();
                             } else {             // 表示在多个图书馆有此书信息
                                 List<String> link_list = new ArrayList<String>();
@@ -134,7 +129,6 @@ public class BookDetailDialog extends DialogFragment{
                         get_call_number_singlelib(modi_html);
                         for(Element i:fin_eles){
                             loc_sta.add(i.parent());
-//                            out_in.add(i.text());
                         }
                         lv.invalidateViews();
 

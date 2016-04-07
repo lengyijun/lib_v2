@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.steven.sjtu_lib_v2.Login;
+import com.example.steven.sjtu_lib_v2.asynctask.MyBorrowAsy;
 import com.example.steven.sjtu_lib_v2.R;
-import com.example.steven.sjtu_lib_v2.Refresh_borrow;
+import com.example.steven.sjtu_lib_v2.RefreshBorrowInterface;
 import com.example.steven.sjtu_lib_v2.adapter.MyBorrowAdapter;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 /**
  * Created by steven on 2016/3/23.
  */
-public class MyBorrowActivity extends AppCompatActivity implements Refresh_borrow{
+public class MyBorrowActivity extends AppCompatActivity implements RefreshBorrowInterface {
     @Bind(R.id.listView2)ListView listView;
     MyBorrowAdapter myBorrowAdapter;
 
@@ -40,7 +40,7 @@ public class MyBorrowActivity extends AppCompatActivity implements Refresh_borro
             if (name.length() == 0 || pass.length() == 0) {
                 Toast.makeText(getApplicationContext(),"尚未登陆",Toast.LENGTH_SHORT).show();
             }else {
-                ArrayList<Element> elementArrayList=new Login(this,name,pass,getApplicationContext()).execute().get();
+                ArrayList<Element> elementArrayList=new MyBorrowAsy(this,name,pass,getApplicationContext()).execute().get();
                 myBorrowAdapter=new MyBorrowAdapter(this,0,elementArrayList);
                 listView.setAdapter(myBorrowAdapter);
             }

@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.steven.sjtu_lib_v2.HistorySearch;
+import com.example.steven.sjtu_lib_v2.asynctask.MyHistoryAsy;
 import com.example.steven.sjtu_lib_v2.R;
-import com.example.steven.sjtu_lib_v2.Refresh_borrow;
+import com.example.steven.sjtu_lib_v2.RefreshBorrowInterface;
 import com.example.steven.sjtu_lib_v2.adapter.HistoryAdapter;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 /**
  * Created by zcw on 16/4/1.
  */
-public class HistoryActivity extends AppCompatActivity implements Refresh_borrow {
+public class HistoryActivity extends AppCompatActivity implements RefreshBorrowInterface {
     @Bind(R.id.listview_history)ListView listView;
     HistoryAdapter HistoryAdapter;
     ArrayList<Element> data;
@@ -41,7 +41,7 @@ public class HistoryActivity extends AppCompatActivity implements Refresh_borrow
             if (name.length() == 0 || pass.length() == 0) {
                 Toast.makeText(getApplicationContext(), "尚未登陆", Toast.LENGTH_SHORT).show();
             } else {
-                ArrayList<Element> elementArrayList = new HistorySearch(this, name, pass, getApplicationContext()).execute().get();
+                ArrayList<Element> elementArrayList = new MyHistoryAsy(this, name, pass, getApplicationContext()).execute().get();
                 HistoryAdapter = new HistoryAdapter(this, 0, elementArrayList);
                 listView.setAdapter(HistoryAdapter);
             }

@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class SingleDetailActivity extends AppCompatActivity {
     String bookInfo;
     String authorInfo;
     String url = null;
+    public static String base_url="http://ourex.lib.sjtu.edu.cn/primo_library/libweb/action/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,15 +155,58 @@ public class SingleDetailActivity extends AppCompatActivity {
                             tvBookIsbn.setText(matcher.group(0));
                             getDoubanInfo(matcher.group(0));
                         } else {
-                            System.out.print("not found");
+                            Toast.makeText(getApplicationContext(),"未能找到isbn，无法加载豆瓣数据",Toast.LENGTH_SHORT).show();
                         }
 
                         Document doc = Jsoup.parse(response);
                         Elements EXLLocationTableColumn1_eles = doc.getElementsByClass("EXLLocationTableColumn1");
-                        for (Element i : EXLLocationTableColumn1_eles) {
-                            table_data.add(i.parent());
+                        if (!EXLLocationTableColumn1_eles.isEmpty()) {
+                            for (Element i : EXLLocationTableColumn1_eles) {
+                                table_data.add(i.parent());
+                            }
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            List<String> link_list = new ArrayList<String>();
+                            Elements link_elm =doc.getElementsByClass("EXLLocationsIcon");
+                            for (Element i : link_elm) {
+                                String temp_link = i.attr("href");
+                                temp_link = base_url+ temp_link;
+                                link_list.add(temp_link);
+                            }
+                            get_location_from_linklist(link_list);
+
                         }
-                        adapter.notifyDataSetChanged();
+                    }
+
+                    private void get_location_from_linklist(List<String> link_list) {
+                        for(String link:link_list){
+                            get_location_from_link(link);
+                        }
+                    }
+
+                    private void get_location_from_link(String link) {
+                        OkHttpUtils.get()
+                                .url(link)
+                                .build()
+                                .execute(new StringCallback() {
+                                    @Override
+                                    public void onError(Call call, Exception e) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(String response) {
+                                        Document doc = Jsoup.parse(response, "", Parser.xmlParser());
+                                        String first_modification = doc.getElementsByTag("modification").first().text();
+                                        Document modi_html = Jsoup.parse(first_modification, "", Parser.htmlParser());
+                                        Elements fin_eles = modi_html.getElementsByClass("EXLLocationTableColumn3");
+
+                                        for (Element i : fin_eles) {
+                                            table_data.add(i.parent());
+                                        }
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
                     }
 
                     private void getDoubanInfo(String isbn) {

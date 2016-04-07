@@ -1,9 +1,11 @@
-package com.example.steven.sjtu_lib_v2;
+package com.example.steven.sjtu_lib_v2.asynctask;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
+
+import com.example.steven.sjtu_lib_v2.RefreshBorrowInterface;
 import com.googlecode.tesseract.android.TessBaseAPI;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
@@ -20,20 +22,18 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import okhttp3.Call;
-
 /**
- * Created by steven on 2016/3/21.
+ * Created by zcw on 16/3/30.
  */
-public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
+public class MyHistoryAsy extends AsyncTask<Void,Void,ArrayList<Element>> {
     Elements elements;
-    private Refresh_borrow listener;
+    private RefreshBorrowInterface listener;
     private String name;
     private String pass;
     private Context context;
 
-    public Login(Refresh_borrow listener,String name,String pass,Context context){
+    public MyHistoryAsy(RefreshBorrowInterface listener, String name, String pass, Context context){
         this.listener=listener;
         this.name=name;
         this.pass=pass;
@@ -138,7 +138,7 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
                                                                                                 @Override
                                                                                                 public void onResponse(String response) {
                                                                                                     System.out.println(response);
-                                                                                                    Pattern pattern = Pattern.compile("(?<=javascript:replacePage\\(').*func=bor-loan&adm_library=SJT50");
+                                                                                                    Pattern pattern = Pattern.compile("(?<=javascript:replacePage\\(').*func=bor-history-loan&adm_library=SJT50");
                                                                                                     final Matcher matcher = pattern.matcher(response);
                                                                                                     if (matcher.find()) {
                                                                                                         String url = matcher.group(0);
@@ -155,7 +155,7 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
                                                                                                                     public void onResponse(String response) {
                                                                                                                         System.out.println(response);
 //                                                                                                                        .不能匹配换行符
-                                                                                                                        Pattern pattern1=Pattern.compile("(?<=在借书籍情况：).*");
+                                                                                                                        Pattern pattern1=Pattern.compile("(?<=书籍借阅历史列表：).*");
                                                                                                                         Matcher matcher1=pattern1.matcher(response);
                                                                                                                         if(matcher1.find()){
                                                                                                                             try {
@@ -204,3 +204,4 @@ public class Login extends AsyncTask<Void,Void,ArrayList<Element>> {
     }
 
 }
+
