@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -30,6 +32,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -67,6 +70,8 @@ public class SingleDetailActivity extends AppCompatActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
+    TextView titleTextView=null;
+
     TableAdapter adapter;
     List<Element> table_data = new ArrayList<Element>();
     String bookInfo;
@@ -87,6 +92,24 @@ public class SingleDetailActivity extends AppCompatActivity {
         url= get_url_from_intent();
         get_table_data(url);
 
+        try {
+            Field f=toolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            titleTextView= (TextView) f.get(toolbar);
+
+            titleTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            titleTextView.setFocusable(true);
+            titleTextView.setFocusableInTouchMode(true);
+            titleTextView.requestFocus();
+            titleTextView.setSingleLine(true);
+            titleTextView.setSelected(true);
+            titleTextView.setMarqueeRepeatLimit(-1);
+            titleTextView.setTextColor(Color.WHITE);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         toolbar.inflateMenu(R.menu.menu_main);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
