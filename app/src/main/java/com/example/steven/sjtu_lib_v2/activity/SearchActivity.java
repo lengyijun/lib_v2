@@ -280,13 +280,6 @@ public class SearchActivity extends AppCompatActivity
         searchView.setAdapter(mSearchAdapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
-    }
-
     @OnTouch(R.id.editText)
     public boolean showLapism() {
         searchView.setVisibility(View.VISIBLE);
