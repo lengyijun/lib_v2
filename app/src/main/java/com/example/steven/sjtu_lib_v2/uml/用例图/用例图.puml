@@ -1,0 +1,24 @@
+@startuml
+left to right direction
+skinparam packagestyle rect
+actor 未登录的用户
+actor 登录的用户
+actor 两个图书馆网站
+
+rectangle 查书{
+ 未登录的用户 -- (图书外借情况)
+ 未登录的用户 -- (位置--楼层，阅览室)
+ 未登录的用户 -- (索书号--具体的书架定位)
+ 未登录的用户 -- (豆瓣信息--评分，简介)
+ 未登录的用户 -- (借阅排名)
+ 查书-right-两个图书馆网站
+}
+
+rectangle 个人的信息{
+ 登录的用户--(个人的外借信息)
+ 登录的用户--(历史借阅信息)
+ 登录的用户--(预约信息)
+ 个人的信息-right-两个图书馆网站
+}
+
+@enduml

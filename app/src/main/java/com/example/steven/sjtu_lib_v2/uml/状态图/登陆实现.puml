@@ -1,0 +1,24 @@
+@startuml
+start
+partition Get1{
+    :get;
+    :http://opac.lib.sjtu.edu.cn:8118/sjt-local/opac-login.jsp;
+    :用jsoup获得sid,returl,se,v;
+}
+partition GetPicture{
+    :get;
+    :https://jaccount.sjtu.edu.cn/jaccount/ulogin
+    :验证码识别;
+    :返回的没有loginfail，就访问这个链接;
+}
+
+partition Get2{
+    :get;
+    :上一步返回的一个url
+    :中间有几个重定向，但是okhttp会自动解决，无需写代码;
+    :最后重定向到http://my.sjtu.edu.cn/workflow/index;
+    :后面忘记了;
+}
+
+stop
+@enduml
