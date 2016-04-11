@@ -1,0 +1,15 @@
+@startuml
+autonumber
+actor 用户
+用户 --> 教学信息服务网 :验证登录
+教学信息服务网 --> 用户 :登录成功
+note left: 访问速度比较快
+participant 图书馆
+database snappydb
+用户--> snappydb:提交jaccount和密码
+note right : jaccount用于显示头像和navigationview的副标题
+用户-->图书馆: 查询借阅信息
+图书馆-->用户: 返回借阅信息
+用户--> snappydb:提交真实姓名
+note right:用于显示navigationview的标题
+@enduml
