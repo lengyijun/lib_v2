@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private List<SearchItem> mSuggestionList;
     BookItemAdapter bookItemAdapter;
     SQLiteDatabase db;
+    LoadingDialog dialog;
 
     String url;
     String NextUrls;
@@ -264,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(Call call, Exception e) {
                         Toast.makeText(getApplicationContext(), "fail to connect", Toast.LENGTH_SHORT).show();
                         superSwipeRefreshLayout.setLoadMore(false);
+                        dialog.dismiss();
                     }
 
                     @Override
@@ -277,9 +279,11 @@ public class MainActivity extends AppCompatActivity {
                                 book_elements.add(i);
                             }
                         }
-                        MainActivity.this.setTitle("已加载了" + book_elements.size() + "本书");
                         toolbar.setTitle("已加载了" + book_elements.size() + "本书");
                         superSwipeRefreshLayout.setLoadMore(false);
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
                     }
                 });
     }
@@ -302,7 +306,6 @@ public class MainActivity extends AppCompatActivity {
     public class NextAsyncTask extends MultiAsynctask<Void, Void, Integer> {
         MainActivity activity;
         int saved_postion;
-        LoadingDialog dialog;
 
         public NextAsyncTask(MainActivity mainActivity) {
             this.activity = mainActivity;
@@ -312,7 +315,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onResult(Integer integer) {
             bookItemAdapter.notifyDataSetChanged();
-            dialog.dismiss();
         }
 
         @Override
