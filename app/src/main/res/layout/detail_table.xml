@@ -9,6 +9,7 @@
 
         <TableRow
             android:background="#93ca4b"
+            android:id="@+id/shadow1"
             android:layout_width="match_parent"
             android:paddingBottom="1dp"
             android:paddingRight="1dp">
@@ -29,6 +30,7 @@
 
         <TableRow
             android:background="#6f9c33"
+            android:id="@+id/deep1"
             android:paddingBottom="1dp"
             android:paddingRight="1dp">
             <TextView
@@ -46,6 +48,7 @@
 
         <TableRow
             android:background="#93ca4b"
+            android:id="@+id/shadow2"
             android:paddingBottom="1dp"
             android:paddingRight="1dp">
             <TextView
@@ -63,6 +66,7 @@
 
         <TableRow
             android:background="#6f9c33"
+            android:id="@+id/deep2"
             android:paddingBottom="1dp"
             android:paddingRight="1dp">
             <TextView

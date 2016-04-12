@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.steven.sjtu_lib_v2.R;
@@ -35,6 +36,17 @@ public class TableAdapter extends ArrayAdapter<Element> {
         single_status_table.setText(element.getElementsByClass("EXLLocationTableColumn2").text());
         return_data_table.setText(element.getElementsByClass("EXLLocationTableColumn3").text());
 
+        if (! return_data_table.getText().toString().equals("在架上")) {
+            TableRow shadow1= (TableRow) convertView.findViewById(R.id.shadow1);
+            TableRow shadow2= (TableRow) convertView.findViewById(R.id.shadow2);
+            TableRow deep1= (TableRow) convertView.findViewById(R.id.deep1);
+            TableRow deep2= (TableRow) convertView.findViewById(R.id.deep2);
+
+            shadow1.setBackgroundColor(android.graphics.Color.parseColor("#fdeee7"));
+            shadow2.setBackgroundColor(android.graphics.Color.parseColor("#fdeee7"));
+            deep1.setBackgroundColor(android.graphics.Color.parseColor("#fdddd0"));
+            deep2.setBackgroundColor(android.graphics.Color.parseColor("#fdddd0"));
+        }
         return convertView;
     }
 
