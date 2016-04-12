@@ -65,12 +65,13 @@ public class MainActivity extends AppCompatActivity {
     ImageView footerImageView;
     TextView footerTextView;
 
-    String url;
-    String NextUrls;
     public List<Element> book_elements = new ArrayList<Element>();
     private List<SearchItem> mSuggestionList;
     BookItemAdapter bookItemAdapter;
     SQLiteDatabase db;
+
+    String url;
+    String NextUrls;
     String base_url = "http://ourex.lib.sjtu.edu.cn/primo_library/libweb/action/search." +
             "do?fn=search&tab=default_tab&vid=chinese&scp.scps=scope%3A%28SJT%29%2Csc" +
             "ope%3A%28sjtu_metadata%29%2Cscope%3A%28sjtu_sfx%29%2Cscope%3A%28sjtulib" +
@@ -147,10 +148,10 @@ public class MainActivity extends AppCompatActivity {
         superSwipeRefreshLayout.setOnPushLoadMoreListener(new SuperSwipeRefreshLayout.OnPushLoadMoreListener() {
             @Override
             public void onLoadMore() {
+                new NextAsyncTask(MainActivity.this).execute();
                 footerTextView.setText("正在加载...");
                 footerImageView.setVisibility(View.GONE);
                 footerProgressBar.setVisibility(View.VISIBLE);
-                new NextAsyncTask(MainActivity.this).execute();
             }
 
             @Override
@@ -262,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onError(Call call, Exception e) {
                         Toast.makeText(getApplicationContext(), "fail to connect", Toast.LENGTH_SHORT).show();
+                        superSwipeRefreshLayout.setLoadMore(false);
                     }
 
                     @Override
@@ -277,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         MainActivity.this.setTitle("已加载了" + book_elements.size() + "本书");
                         toolbar.setTitle("已加载了" + book_elements.size() + "本书");
+                        superSwipeRefreshLayout.setLoadMore(false);
                     }
                 });
     }
@@ -296,39 +299,35 @@ public class MainActivity extends AppCompatActivity {
         plistview.setSelectionAfterHeaderView();
     }
 
-    public class NextAsyncTask extends MultiAsynctask<Void, Void, Void> {
+    public class NextAsyncTask extends MultiAsynctask<Void, Void, Integer> {
         MainActivity activity;
         int saved_postion;
         LoadingDialog dialog;
-        Context context;
 
         public NextAsyncTask(MainActivity mainActivity) {
             this.activity = mainActivity;
-            this.context = activity;
             dialog = new LoadingDialog(mainActivity);
         }
 
         @Override
-        public void onResult(Void Void) {
+        public void onResult(Integer integer) {
             bookItemAdapter.notifyDataSetChanged();
             dialog.dismiss();
-            superSwipeRefreshLayout.setLoadMore(false);
         }
 
         @Override
-        public Void onTask(Void... params) {
-            synchronized (this) {
-                while (NextUrls.length() == 0 || book_elements.size() == 0) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        public Integer onTask(Void... params) {
+            while (NextUrls.length() == 0 || book_elements.size() == 0) {
+                try {
+                    Thread.sleep(10);
+                    System.out.println(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
             get_list_from_url(NextUrls);
 
-            return null;
+            return 1;
         }
 
         @Override
