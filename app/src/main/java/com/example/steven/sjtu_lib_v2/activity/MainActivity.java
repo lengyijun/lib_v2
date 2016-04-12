@@ -38,6 +38,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
 import okhttp3.Call;
 
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.swipe_refresh)
     SuperSwipeRefreshLayout superSwipeRefreshLayout;
     @Bind(R.id.listView)
-    SwipeMenuListView plistiview;
+    SwipeMenuListView plistview;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -124,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
                 menu.addMenuItem(more_info);
             }
         };
-        plistiview.setMenuCreator(creator);
+        plistview.setMenuCreator(creator);
         bookItemAdapter = new BookItemAdapter(this, 0, book_elements);
-        plistiview.setAdapter(bookItemAdapter);
-        plistiview.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+        plistview.setAdapter(bookItemAdapter);
+        plistview.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
@@ -217,6 +218,11 @@ public class MainActivity extends AppCompatActivity {
         bookDetail.show(getFragmentManager(), "book");
     }
 
+    @OnClick(R.id.toolbar)
+    void scroolToTop() {
+        plistview.setSelectionAfterHeaderView();
+    }
+
     public class NextAsyncTask extends MultiAsynctask<Void, Void, Void> {
         MainActivity activity;
         int saved_postion;
@@ -254,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPrepare() {
-            saved_postion = plistiview.getFirstVisiblePosition();
+            saved_postion = plistview.getFirstVisiblePosition();
             dialog.show();
         }
     }
