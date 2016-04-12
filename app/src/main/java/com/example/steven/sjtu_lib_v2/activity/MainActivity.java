@@ -1,7 +1,10 @@
 package com.example.steven.sjtu_lib_v2.activity;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -25,6 +28,9 @@ import com.example.steven.sjtu_lib_v2.adapter.BookItemAdapter;
 import com.example.steven.sjtu_lib_v2.dialog.BookDetailDialog;
 import com.example.steven.sjtu_lib_v2.dialog.LoadingDialog;
 import com.example.steven.sjtu_lib_v2.view.SuperSwipeRefreshLayout;
+import com.lapism.searchview.adapter.SearchAdapter;
+import com.lapism.searchview.adapter.SearchItem;
+import com.lapism.searchview.view.SearchCodes;
 import com.lapism.searchview.view.SearchView;
 import com.yolanda.multiasynctask.MultiAsynctask;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -62,7 +68,13 @@ public class MainActivity extends AppCompatActivity {
     String url;
     String NextUrls;
     public List<Element> book_elements = new ArrayList<Element>();
+    private List<SearchItem> mSuggestionList;
     BookItemAdapter bookItemAdapter;
+    SQLiteDatabase db;
+    String base_url = "http://ourex.lib.sjtu.edu.cn/primo_library/libweb/action/search." +
+            "do?fn=search&tab=default_tab&vid=chinese&scp.scps=scope%3A%28SJT%29%2Csc" +
+            "ope%3A%28sjtu_metadata%29%2Cscope%3A%28sjtu_sfx%29%2Cscope%3A%28sjtulib" +
+            "zw%29%2Cscope%3A%28sjtulibxw%29%2CDuxiuBook&vl%28freeText0%29=";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +93,51 @@ public class MainActivity extends AppCompatActivity {
         plistview_init();
         superSwipelayout_init();
         get_list_from_url(url);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                ContentValues cv = new ContentValues();
+                cv.put("name", query);
+                db.insertWithOnConflict("search_history", null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+                direct_search(base_url + query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        db = openOrCreateDatabase("collection.db", Context.MODE_PRIVATE, null);
+        List<SearchItem> list = new ArrayList<>();
+        int mTheme= SearchCodes.THEME_LIGHT;
+
+        Cursor cursor = db.rawQuery("select * from search_history", null);
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                list.add(new SearchItem(name));
+                cursor.moveToNext();
+            }
+        }
+        mSuggestionList=new ArrayList<>();
+        mSuggestionList.addAll(list);
+        List<SearchItem> mReasultList=new ArrayList<>();
+        SearchAdapter mSearchAdapter=new SearchAdapter(this,mReasultList,mSuggestionList,mTheme);
+        mSearchAdapter.setOnItemClickListener(new SearchAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                TextView textview = (TextView) view.findViewById(R.id.textView_item_text);
+                String name = textview.getText().toString();
+                direct_search(base_url + name);
+            }
+        });
+        super.onStart();
+        searchView.setAdapter(mSearchAdapter);
     }
 
     private void superSwipelayout_init() {
@@ -304,4 +361,12 @@ public class MainActivity extends AppCompatActivity {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
     }
+
+    private void direct_search(String url) {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, MainActivity.class);
+        intent.putExtra("url", url);
+        startActivity(intent);
+    }
+
 }
