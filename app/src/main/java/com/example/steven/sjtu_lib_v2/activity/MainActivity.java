@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -24,6 +25,7 @@ import com.example.steven.sjtu_lib_v2.adapter.BookItemAdapter;
 import com.example.steven.sjtu_lib_v2.dialog.BookDetailDialog;
 import com.example.steven.sjtu_lib_v2.dialog.LoadingDialog;
 import com.example.steven.sjtu_lib_v2.view.SuperSwipeRefreshLayout;
+import com.lapism.searchview.view.SearchView;
 import com.yolanda.multiasynctask.MultiAsynctask;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -49,22 +51,32 @@ public class MainActivity extends AppCompatActivity {
     SwipeMenuListView plistview;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.searchView)
+    SearchView searchView;
 
     //    footerview
     ProgressBar footerProgressBar;
     ImageView footerImageView;
     TextView footerTextView;
-    String url;
 
+    String url;
     String NextUrls;
     public List<Element> book_elements = new ArrayList<Element>();
     BookItemAdapter bookItemAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.result);
+        setContentView(R.layout.result_drawer);
         ButterKnife.bind(this);
 
+        toolbar.inflateMenu(R.menu.menu_result);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                searchView.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
         get_intent_extra();
         plistview_init();
         superSwipelayout_init();
@@ -214,8 +226,12 @@ public class MainActivity extends AppCompatActivity {
 
     @OnItemClick(R.id.listView)
     void onItemSelected(int position) {
-        BookDetailDialog bookDetail = new BookDetailDialog(book_elements.get(position));
-        bookDetail.show(getFragmentManager(), "book");
+        if (searchView.getVisibility() == View.VISIBLE) {
+            searchView.setVisibility(View.INVISIBLE);
+        } else {
+            BookDetailDialog bookDetail = new BookDetailDialog(book_elements.get(position));
+            bookDetail.show(getFragmentManager(), "book");
+        }
     }
 
     @OnClick(R.id.toolbar)

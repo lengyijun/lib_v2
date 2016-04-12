@@ -6,13 +6,8 @@
     <item
         android:id="@+id/action_settings"
         android:title="nothing"
-        android:icon="@android:drawable/ic_dialog_dialer"
+        android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="ifRoom">
-        <menu>
-            <item
-                android:id="@+id/add_to_collection"
-                android:title="显示收藏"/>
-        </menu>
     </item>
 
 </menu>
