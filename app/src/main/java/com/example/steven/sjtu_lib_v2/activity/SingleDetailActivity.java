@@ -7,11 +7,19 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -70,6 +78,8 @@ public class SingleDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
     @Bind(R.id.tag_cloud_view)
     TagCloudView tagCloudView;
+    @Bind(R.id.bookinfo)
+    TextView tvBookInfo;
 
     TextView titleTextView = null;
 
@@ -254,8 +264,18 @@ public class SingleDetailActivity extends AppCompatActivity {
                                             tvBookTime.setText(jsonobect.getString("pubdate"));
                                             tvBookScore.setText(jsonobect.getJSONObject("rating").getString("average"));
                                             tvBookPage.setText(jsonobect.getString("pages"));
-                                            bookInfo = jsonobect.getString("summary");
+                                            tvBookInfo.setText(jsonobect.getString("summary"));
                                             authorInfo = jsonobect.getString("author_intro");
+                                            final String doubanlink=jsonobect.getString("alt");
+                                            makeTextViewResizable(tvBookInfo, 3, "View More", true);
+
+                                            ivBookIcon.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(doubanlink));
+                                                    startActivity(browserIntent);
+                                                }
+                                            });
 
                                             String imageUrl = jsonobect.getString("image");
                                             OkHttpUtils.get()
@@ -272,6 +292,7 @@ public class SingleDetailActivity extends AppCompatActivity {
                                                             ivBookIcon.setImageBitmap(response);
                                                         }
                                                     });
+
                                             JSONArray jsonarray = jsonobect.getJSONArray("tags");
                                             List<String > tag=new ArrayList<String>();
                                             for (int i = 0; i < jsonarray.length(); i++) {
@@ -286,26 +307,6 @@ public class SingleDetailActivity extends AppCompatActivity {
                                 });
                     }
                 });
-    }
-
-    @OnClick(R.id.iv_book_icon)
-    public void showBookInfo() {
-        if (bookInfo == null) {
-            new AlertDialog.Builder(SingleDetailActivity.this)
-                    .setTitle("图书信息")
-                    .setMessage("请稍等。。")
-                    .setPositiveButton("确认", null)
-                    .create()
-                    .show();
-        } else {
-            new AlertDialog.Builder(SingleDetailActivity.this)
-                    .setTitle("图书信息")
-                    .setMessage("请稍等。。")
-                    .setMessage(bookInfo)
-                    .setPositiveButton("确认", null)
-                    .create()
-                    .show();
-        }
     }
 
     @OnClick(R.id.tv_book_author)
@@ -326,4 +327,80 @@ public class SingleDetailActivity extends AppCompatActivity {
                     .show();
         }
     }
+
+    public static void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore) {
+
+        if (tv.getTag() == null) {
+            tv.setTag(tv.getText());
+        }
+        ViewTreeObserver vto = tv.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onGlobalLayout() {
+
+                ViewTreeObserver obs = tv.getViewTreeObserver();
+                obs.removeGlobalOnLayoutListener(this);
+                if (maxLine == 0) {
+                    int lineEndIndex = tv.getLayout().getLineEnd(0);
+                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                    viewMore), TextView.BufferType.SPANNABLE);
+                } else if (maxLine > 0 && tv.getLineCount() >= maxLine) {
+                    int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
+                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                    viewMore), TextView.BufferType.SPANNABLE);
+                } else {
+                    int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
+                    String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
+                                    viewMore), TextView.BufferType.SPANNABLE);
+                }
+            }
+        });
+
+    }
+
+    private static SpannableStringBuilder addClickablePartTextViewResizable(final Spanned strSpanned, final TextView tv,
+                                                                            final int maxLine, final String spanableText, final boolean viewMore) {
+        String str = strSpanned.toString();
+        SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
+
+        if (str.contains(spanableText)) {
+            ssb.setSpan(new ClickableSpan() {
+
+                @Override
+                public void onClick(View widget) {
+
+                    if (viewMore) {
+                        tv.setLayoutParams(tv.getLayoutParams());
+                        tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
+                        tv.invalidate();
+                        makeTextViewResizable(tv, -1, "View Less", false);
+                    } else {
+                        tv.setLayoutParams(tv.getLayoutParams());
+                        tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
+                        tv.invalidate();
+                        makeTextViewResizable(tv, 3, "View More", true);
+                    }
+
+                }
+            }, str.indexOf(spanableText), str.indexOf(spanableText) + spanableText.length(), 0);
+
+        }
+        return ssb;
+
+    }
+
 }

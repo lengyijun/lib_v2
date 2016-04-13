@@ -26,6 +26,7 @@
             android:src="@drawable/defaultbook"
             android:scaleType="centerCrop"
             android:layout_height="180dp" />
+
         <LinearLayout
             android:layout_toRightOf="@+id/iv_book_icon"
             android:id="@+id/ll_book_icon"
@@ -85,6 +86,7 @@
                 android:src="@drawable/score"
                 />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/tv_linearlayout"
             android:layout_toRightOf="@+id/ll_book_icon"
@@ -146,23 +148,35 @@
                 />
         </LinearLayout>
 
-            <me.next.tagview.TagCloudView
-                android:id="@+id/tag_cloud_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_linearlayout"
-                android:background="@drawable/background_tagcloudview_black_selector"
-                app:tcvItemBorderHorizontal="8dp"
-                app:tcvItemBorderVertical="6dp"
-                app:tcvBorder="8dp"
-                app:tcvTextColor="#123455"
-                app:tcvSingleLine="false"
-                app:tcvCanTagClick="false"
-                />
+        <me.next.tagview.TagCloudView
+            android:id="@+id/tag_cloud_view"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/tv_linearlayout"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_tagcloudview_black_selector"
+            app:tcvItemBorderHorizontal="8dp"
+            app:tcvItemBorderVertical="6dp"
+            app:tcvBorder="8dp"
+            app:tcvTextColor="#123455"
+            app:tcvSingleLine="false"
+            app:tcvCanTagClick="false"
+            />
 
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bookinfo"
+        android:layout_marginTop="10dp"
+        android:minLines="1"
+        android:maxLines="3"/>
+
+
     <ListView
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listview_table"
@@ -170,4 +184,5 @@
         android:dividerHeight="20dp"
         android:divider="@color/white"
         android:layout_weight="1" />
+
 </LinearLayout>
