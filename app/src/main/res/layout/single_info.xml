@@ -86,6 +86,7 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/tv_linearlayout"
             android:layout_toRightOf="@+id/ll_book_icon"
             android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
@@ -144,29 +145,21 @@
                 android:layout_marginTop="5dp"
                 />
         </LinearLayout>
-        <RelativeLayout
-            android:layout_alignParentBottom="true"
-            android:layout_width="fill_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_height="40dp">
-            <ImageView
-                android:id="@+id/iv_book_tag"
-                android:layout_width="18dp"
-                android:src="@drawable/tag"
-                android:layout_centerVertical="true"
-                android:layout_height="18dp" />
-            <TextView
-                android:id="@+id/tv_book_tag"
-                android:maxLines="2"
-                android:layout_marginRight="105dp"
-                android:layout_toRightOf="@+id/iv_book_tag"
-                android:layout_marginLeft="5dp"
-                android:textColor="@color/gray"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
+
+            <me.next.tagview.TagCloudView
+                android:id="@+id/tag_cloud_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_linearlayout"
+                android:background="@drawable/background_tagcloudview_black_selector"
+                app:tcvItemBorderHorizontal="8dp"
+                app:tcvItemBorderVertical="6dp"
+                app:tcvBorder="8dp"
+                app:tcvTextColor="#123455"
+                app:tcvSingleLine="false"
+                app:tcvCanTagClick="false"
+                />
+
     </RelativeLayout>
 
     <ListView

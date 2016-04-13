@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.next.tagview.TagCloudView;
 import okhttp3.Call;
 
 /**
@@ -63,21 +64,21 @@ public class SingleDetailActivity extends AppCompatActivity {
     TextView tvBookPrice;
     @Bind(R.id.tv_book_score)
     TextView tvBookScore;
-    @Bind(R.id.tv_book_tag)
-    TextView tvBookTag;
     @Bind(R.id.iv_book_icon)
     ImageView ivBookIcon;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.tag_cloud_view)
+    TagCloudView tagCloudView;
 
-    TextView titleTextView=null;
+    TextView titleTextView = null;
 
     TableAdapter adapter;
     List<Element> table_data = new ArrayList<Element>();
     String bookInfo;
     String authorInfo;
     String url = null;
-    public static String base_url="http://ourex.lib.sjtu.edu.cn/primo_library/libweb/action/";
+    public static String base_url = "http://ourex.lib.sjtu.edu.cn/primo_library/libweb/action/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +90,13 @@ public class SingleDetailActivity extends AppCompatActivity {
         lv_table.setAdapter(adapter);
 
         final String detail_html = get_html_from_intent();
-        url= get_url_from_intent();
+        url = get_url_from_intent();
         get_table_data(url);
 
         try {
-            Field f=toolbar.getClass().getDeclaredField("mTitleTextView");
+            Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
             f.setAccessible(true);
-            titleTextView= (TextView) f.get(toolbar);
+            titleTextView = (TextView) f.get(toolbar);
 
             titleTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             titleTextView.setFocusable(true);
@@ -133,9 +134,9 @@ public class SingleDetailActivity extends AppCompatActivity {
                         }
                         break;
                     case R.id.share:
-                        Intent intent=new Intent();
+                        Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_SEND);
-                        intent.putExtra(Intent.EXTRA_TEXT,url);
+                        intent.putExtra(Intent.EXTRA_TEXT, url);
                         intent.setType("text/plain");
                         startActivity(intent);
                         break;
@@ -178,7 +179,7 @@ public class SingleDetailActivity extends AppCompatActivity {
                             tvBookIsbn.setText(matcher.group(0));
                             getDoubanInfo(matcher.group(0));
                         } else {
-                            Toast.makeText(getApplicationContext(),"未能找到isbn，无法加载豆瓣数据",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "未能找到isbn，无法加载豆瓣数据", Toast.LENGTH_SHORT).show();
                         }
 
                         Document doc = Jsoup.parse(response);
@@ -190,10 +191,10 @@ public class SingleDetailActivity extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
                         } else {
                             List<String> link_list = new ArrayList<String>();
-                            Elements link_elm =doc.getElementsByClass("EXLLocationsIcon");
+                            Elements link_elm = doc.getElementsByClass("EXLLocationsIcon");
                             for (Element i : link_elm) {
                                 String temp_link = i.attr("href");
-                                temp_link = base_url+ temp_link;
+                                temp_link = base_url + temp_link;
                                 link_list.add(temp_link);
                             }
                             get_location_from_linklist(link_list);
@@ -202,7 +203,7 @@ public class SingleDetailActivity extends AppCompatActivity {
                     }
 
                     private void get_location_from_linklist(List<String> link_list) {
-                        for(String link:link_list){
+                        for (String link : link_list) {
                             get_location_from_link(link);
                         }
                     }
@@ -272,13 +273,12 @@ public class SingleDetailActivity extends AppCompatActivity {
                                                         }
                                                     });
                                             JSONArray jsonarray = jsonobect.getJSONArray("tags");
-                                            String tagContent = "";
+                                            List<String > tag=new ArrayList<String>();
                                             for (int i = 0; i < jsonarray.length(); i++) {
                                                 JSONObject object = jsonarray.getJSONObject(i);
-                                                tagContent += object.getString("title");
-                                                tagContent += ",";
+                                                tag.add(object.getString("title"));
                                             }
-                                            tvBookTag.setText(tagContent);
+                                            tagCloudView.setTags(tag);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
