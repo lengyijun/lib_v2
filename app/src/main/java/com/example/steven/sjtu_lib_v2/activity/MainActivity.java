@@ -265,7 +265,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(Call call, Exception e) {
                         Toast.makeText(getApplicationContext(), "fail to connect", Toast.LENGTH_SHORT).show();
                         superSwipeRefreshLayout.setLoadMore(false);
-                        dialog.dismiss();
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
                     }
 
                     @Override
