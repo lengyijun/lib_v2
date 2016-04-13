@@ -46,4 +46,5 @@ dependencies {
     compile 'com.esotericsoftware.kryo:kryo:2.24.0'
     compile 'com.lapism:searchview:2.2'
     compile 'com.github.kingideayou:tagcloudview:1.0.2'
+    compile 'com.moxun:tagcloudlib:1.1.3'
 }

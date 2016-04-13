@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -22,11 +21,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.steven.sjtu_lib_v2.R;
+import com.example.steven.sjtu_lib_v2.adapter.TextTagsAdapter;
 import com.example.steven.sjtu_lib_v2.identicons.Identicon;
 import com.lapism.searchview.adapter.SearchAdapter;
 import com.lapism.searchview.adapter.SearchItem;
 import com.lapism.searchview.view.SearchCodes;
 import com.lapism.searchview.view.SearchView;
+import com.moxun.tagcloudlib.view.TagCloudView;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
 import com.snappydb.SnappydbException;
@@ -56,13 +57,15 @@ public class SearchActivity extends AppCompatActivity
     SearchView searchView;
     @Bind(R.id.editText)
     EditText editText;
+    @Bind(R.id.tag_cloud)
+    TagCloudView tagCloud;
 
     Identicon identicon;
     TextView tvNaviTitle;
     TextView tvNaviSubTitle;
 
     private List<SearchItem> mSuggestionList;
-    private int mTheme= SearchCodes.THEME_LIGHT;
+    private int mTheme = SearchCodes.THEME_LIGHT;
     SQLiteDatabase db;
     String base_url = "http://ourex.lib.sjtu.edu.cn/primo_library/libweb/action/search." +
             "do?fn=search&tab=default_tab&vid=chinese&scp.scps=scope%3A%28SJT%29%2Csc" +
@@ -98,8 +101,8 @@ public class SearchActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                ContentValues cv=new ContentValues();
-                cv.put("name",query);
+                ContentValues cv = new ContentValues();
+                cv.put("name", query);
                 db.insertWithOnConflict("search_history", null, cv, SQLiteDatabase.CONFLICT_REPLACE);
                 direct_search(base_url + query);
                 return false;
@@ -116,6 +119,8 @@ public class SearchActivity extends AppCompatActivity
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
+        TextTagsAdapter textTagsAdapter=new TextTagsAdapter();
+        tagCloud.setAdapter(textTagsAdapter);
     }
 
     @Override
@@ -190,7 +195,7 @@ public class SearchActivity extends AppCompatActivity
         }
     }
 
-    private void direct_search(String url) {
+    public void direct_search(String url) {
         Intent intent = new Intent();
         intent.setClass(SearchActivity.this, MainActivity.class);
         intent.putExtra("url", url);
@@ -216,7 +221,7 @@ public class SearchActivity extends AppCompatActivity
             Intent intent = new Intent();
             intent.setClass(SearchActivity.this, RankActivity.class);
             startActivity(intent);
-        } else if (id ==R.id.history)  {
+        } else if (id == R.id.history) {
             Intent intent = new Intent();
 
             intent.setClass(SearchActivity.this, MyHistoryActivity.class);
@@ -260,20 +265,20 @@ public class SearchActivity extends AppCompatActivity
                 cursor.moveToNext();
             }
         }
-        mSuggestionList=new ArrayList<>();
+        mSuggestionList = new ArrayList<>();
         mSuggestionList.addAll(list);
         mSuggestionList.add(new SearchItem("go"));
         mSuggestionList.add(new SearchItem("nodejs"));
         mSuggestionList.add(new SearchItem("vim"));
         mSuggestionList.add(new SearchItem("hexo"));
-        List<SearchItem> mReasultList=new ArrayList<>();
-        SearchAdapter mSearchAdapter=new SearchAdapter(this,mReasultList,mSuggestionList,mTheme);
+        List<SearchItem> mReasultList = new ArrayList<>();
+        SearchAdapter mSearchAdapter = new SearchAdapter(this, mReasultList, mSuggestionList, mTheme);
         mSearchAdapter.setOnItemClickListener(new SearchAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                TextView textview= (TextView) view.findViewById(R.id.textView_item_text);
-                String name=textview.getText().toString();
-                direct_search(base_url+name);
+                TextView textview = (TextView) view.findViewById(R.id.textView_item_text);
+                String name = textview.getText().toString();
+                direct_search(base_url + name);
             }
         });
         super.onStart();

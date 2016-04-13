@@ -28,4 +28,15 @@
         android:id="@+id/editText"
         android:layout_gravity="center_horizontal" />
 
+    <com.moxun.tagcloudlib.view.TagCloudView
+        android:id="@+id/tag_cloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:autoScrollMode="uniform"
+        app:darkColor="@color/tagDark"
+        app:lightColor="@color/tagLight"
+        app:radiusPercent="0.6"
+        app:scrollSpeed="3" />
+
 </LinearLayout>

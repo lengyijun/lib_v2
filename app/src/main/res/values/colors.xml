@@ -7,4 +7,6 @@
     <color name="white">#ffffff</color>
     <color name="search_item_bg">#cccccc</color>
     <color name="gray">#808080</color><!--灰色 -->
+    <color name="tagLight">#b1c914</color>
+    <color name="tagDark">#206fa1</color>
 </resources>
