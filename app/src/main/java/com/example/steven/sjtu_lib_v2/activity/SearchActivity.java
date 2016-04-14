@@ -89,7 +89,7 @@ public class SearchActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar1, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.setDrawerListener(toggle);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         db = openOrCreateDatabase("collection.db", Context.MODE_PRIVATE, null);
