@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        dialog=new LoadingDialog(MainActivity.this);
+        dialog.show();
         get_intent_extra();
         plistview_init();
         superSwipelayout_init();
