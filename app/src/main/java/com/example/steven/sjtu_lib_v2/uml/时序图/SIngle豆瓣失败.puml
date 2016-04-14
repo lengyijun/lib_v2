@@ -1,0 +1,7 @@
+@startuml
+autonumber
+app -> 豆瓣api: 根据isbn请求数据
+豆瓣api --> app: 返回异常
+note right:1.没有这个isbn\n2.访问达到上限
+
+@enduml
