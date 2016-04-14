@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +41,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnTouch;
 
 /**
  * Created by steven on 2016/2/7.
@@ -55,8 +53,6 @@ public class SearchActivity extends AppCompatActivity
     DrawerLayout drawerLayout;
     @Bind(R.id.searchView)
     SearchView searchView;
-    @Bind(R.id.editText)
-    EditText editText;
     @Bind(R.id.tag_cloud)
     TagCloudView tagCloud;
 
@@ -267,10 +263,6 @@ public class SearchActivity extends AppCompatActivity
         }
         mSuggestionList = new ArrayList<>();
         mSuggestionList.addAll(list);
-        mSuggestionList.add(new SearchItem("go"));
-        mSuggestionList.add(new SearchItem("nodejs"));
-        mSuggestionList.add(new SearchItem("vim"));
-        mSuggestionList.add(new SearchItem("hexo"));
         List<SearchItem> mReasultList = new ArrayList<>();
         SearchAdapter mSearchAdapter = new SearchAdapter(this, mReasultList, mSuggestionList, mTheme);
         mSearchAdapter.setOnItemClickListener(new SearchAdapter.OnItemClickListener() {
@@ -283,13 +275,6 @@ public class SearchActivity extends AppCompatActivity
         });
         super.onStart();
         searchView.setAdapter(mSearchAdapter);
-    }
-
-    @OnTouch(R.id.editText)
-    public boolean showLapism() {
-        searchView.setVisibility(View.VISIBLE);
-        searchView.requestFocus();
-        return false;
     }
 
 }

@@ -19,7 +19,7 @@
         app:search_style = "toolbar_classic"
         app:search_theme = "light"
         app:search_divider = "true"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:search_voice = "true"
         app:search_voice_text = "Voice text"
         android:layout_width="match_parent"
