@@ -149,10 +149,15 @@ public class MainActivity extends AppCompatActivity {
         superSwipeRefreshLayout.setOnPushLoadMoreListener(new SuperSwipeRefreshLayout.OnPushLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                new NextAsyncTask(MainActivity.this).execute();
-                footerTextView.setText("正在加载...");
-                footerImageView.setVisibility(View.GONE);
-                footerProgressBar.setVisibility(View.VISIBLE);
+                if (NextUrls.equals("no more")) {
+                    Toast.makeText(getApplicationContext(), "已经是最后一页了", Toast.LENGTH_SHORT).show();
+                    superSwipeRefreshLayout.setLoadMore(false);
+                } else {
+                    new NextAsyncTask(MainActivity.this).execute();
+                    footerTextView.setText("正在加载...");
+                    footerImageView.setVisibility(View.GONE);
+                    footerProgressBar.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -355,6 +360,8 @@ public class MainActivity extends AppCompatActivity {
             bookItemAdapter.notifyDataSetChanged();
             if (elements.size() != 0) {
                 NextUrls = elements.first().attr("href");
+            } else { //没有下一页了
+                NextUrls="no more";
             }
         }
 
