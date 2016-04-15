@@ -11,10 +11,19 @@ import android.widget.TextView;
 
 import com.example.steven.sjtu_lib_v2.activity.MainActivity;
 import com.moxun.tagcloudlib.view.TagsAdapter;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * Created by moxun on 16/1/19.
@@ -26,17 +35,6 @@ public class TextTagsAdapter extends TagsAdapter {
     public TextTagsAdapter(@NonNull String... data) {
         dataSet.clear();
         Collections.addAll(dataSet, data);
-        dataSet.add("docker");
-        dataSet.add("machine learning");
-        dataSet.add("haskell");
-        dataSet.add("scala");
-        dataSet.add("kotlin");
-        dataSet.add("lisp");
-        dataSet.add("node.js");
-        dataSet.add("hadoop");
-        dataSet.add("bootstrap");
-        dataSet.add("angularjs");
-        dataSet.add("go");
     }
 
     @Override

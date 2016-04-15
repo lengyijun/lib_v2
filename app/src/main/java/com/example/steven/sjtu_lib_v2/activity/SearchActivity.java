@@ -30,6 +30,13 @@ import com.moxun.tagcloudlib.view.TagCloudView;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
 import com.snappydb.SnappydbException;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,10 +44,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 
 /**
  * Created by steven on 2016/2/7.
@@ -115,8 +124,43 @@ public class SearchActivity extends AppCompatActivity
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-        TextTagsAdapter textTagsAdapter=new TextTagsAdapter();
-        tagCloud.setAdapter(textTagsAdapter);
+        OkHttpUtils.get()
+                .url("https://read.douban.com/topic/326/")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        String [] data={
+                            "docker",
+                            "机器学习",
+                            "haskell",
+                            "scala",
+                            "kotlin",
+                            "lisp",
+                            "node.js",
+                            "hadoop",
+                            "bootstrap",
+                            "angularjs",
+                            "go",
+                        };
+                        TextTagsAdapter textTagsAdapter = new TextTagsAdapter(data);
+                        tagCloud.setAdapter(textTagsAdapter);
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        Document document = Jsoup.parse(response);
+                        Elements elements = document.getElementsByClass("title");
+                        String[] data = new String[elements.size()];
+                        for (int i = 0; i < elements.size(); i++) {
+                            String temp=elements.get(i).text();
+                            temp=temp.replaceAll("（.*）","");
+                            data[i]=temp;
+                        }
+                        TextTagsAdapter textTagsAdapter = new TextTagsAdapter(data);
+                        tagCloud.setAdapter(textTagsAdapter);
+                    }
+                });
     }
 
     @Override
