@@ -14,27 +14,7 @@
         <activity android:name=".activity.SearchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.SingleDetailActivity" />
-        <activity android:name=".activity.MyCollectionActivity" />
-        <activity android:name=".activity.MyBorrowActivity" />
-        <activity android:name=".activity.RankActivity" />
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.HistoryActivity" />
-
-        <service
-            android:name=".updateService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-    </application>
-
-<<<<<<< Updated upstream
-            <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
     <activity android:name=".activity.MainActivity" />
@@ -45,6 +25,10 @@
     <activity android:name=".activity.LoginActivity" />
     <activity android:name=".activity.MyHistoryActivity" />
 </application>
-=======
->>>>>>> Stashed changes
+
+    <service
+    android:name=".updateService"
+    android:enabled="true"
+    android:exported="true" >
+    </service>
 </manifest>

@@ -34,9 +34,16 @@ public class updateService extends Service {
                 }
             }
         };
-        timer.schedule(task, 5000, 5000);
+        timer.schedule(task, 1000, 1000);
     }
     @Override
     public IBinder onBind(Intent intent) {
         return null;}
+
+
+    @Override
+    public void onDestroy() {
+        System.out.println("onDestroy");
+        super.onDestroy();
+    }
 }

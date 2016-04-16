@@ -1,17 +1,15 @@
 package com.example.steven.sjtu_lib_v2.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.steven.sjtu_lib_v2.asynctask.MyBorrowAsy;
 import com.example.steven.sjtu_lib_v2.R;
 import com.example.steven.sjtu_lib_v2.RefreshBorrowInterface;
 import com.example.steven.sjtu_lib_v2.adapter.MyBorrowAdapter;
+import com.example.steven.sjtu_lib_v2.asynctask.MyBorrowAsy;
 import com.example.steven.sjtu_lib_v2.dbHelper;
-import com.example.steven.sjtu_lib_v2.updateService;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
 import com.snappydb.SnappydbException;
@@ -45,18 +43,16 @@ public class MyBorrowActivity extends AppCompatActivity implements RefreshBorrow
             if (name.length() == 0 || pass.length() == 0) {
                 Toast.makeText(getApplicationContext(),"尚未登陆",Toast.LENGTH_SHORT).show();
             }else {
-//<<<<<<< Updated upstream
                 ArrayList<Element> elementArrayList=new MyBorrowAsy(this,name,pass,getApplicationContext()).execute().get();
-//=======
 //                ArrayList<Element> elementArrayList=new Login(this,name,pass,getApplicationContext()).execute().get();
                 DB.insert(elementArrayList);
 //>>>>>>> Stashed changes
                 myBorrowAdapter=new MyBorrowAdapter(this,0,elementArrayList);
                 listView.setAdapter(myBorrowAdapter);
 
-                final Intent intent = new Intent(MyBorrowActivity.this, updateService.class);
-                startService(intent);
-                Toast.makeText(MyBorrowActivity.this, "Service启动成功", Toast.LENGTH_SHORT).show();
+//                final Intent intent = new Intent(MyBorrowActivity.this, updateService.class);
+//                startService(intent);
+//                Toast.makeText(MyBorrowActivity.this, "Service启动成功", Toast.LENGTH_SHORT).show();
             }
 
         } catch (InterruptedException e) {

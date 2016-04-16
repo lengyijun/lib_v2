@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.example.steven.sjtu_lib_v2.R;
 import com.example.steven.sjtu_lib_v2.adapter.BookItemAdapter;
 import com.example.steven.sjtu_lib_v2.dialog.BookDetailDialog;
 import com.example.steven.sjtu_lib_v2.dialog.LoadingDialog;
+import com.example.steven.sjtu_lib_v2.updateService;
 import com.example.steven.sjtu_lib_v2.view.SuperSwipeRefreshLayout;
 import com.lapism.searchview.adapter.SearchAdapter;
 import com.lapism.searchview.adapter.SearchItem;
@@ -58,7 +60,10 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     @Bind(R.id.searchView)
     SearchView searchView;
-
+    @Bind(R.id.StartService)
+    Button startButton;
+    @Bind(R.id.DestroyService)
+    Button stopButton;
     //    footerview
     ProgressBar footerProgressBar;
     ImageView footerImageView;
@@ -87,6 +92,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.result_drawer);
         ButterKnife.bind(this);
 //<<<<<<< Updated upstream
+        //启动服务按钮
+        startButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, updateService.class);
+                startService(intent);
+                Toast.makeText(MainActivity.this, "Service启动成功", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //关闭服务按钮
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // 创建Intent
+                Intent intent = new Intent(MainActivity.this, updateService.class);
+                stopService(intent);
+                Toast.makeText(MainActivity.this, "Service停止成功", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         toolbar.inflateMenu(R.menu.menu_result);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -124,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+
         db = openOrCreateDatabase("collection.db", Context.MODE_PRIVATE, null);
         List<SearchItem> list = new ArrayList<>();
         int mTheme= SearchCodes.THEME_LIGHT;
