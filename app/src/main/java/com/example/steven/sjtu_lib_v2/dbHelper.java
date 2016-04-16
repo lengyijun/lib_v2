@@ -14,20 +14,17 @@ import java.util.ArrayList;
 /**
  * Created by zcw on 16/4/5.
  */
-public class dbHelper extends SQLiteOpenHelper{
+public class DbHelper extends SQLiteOpenHelper{
     public static final String TABLE_NAME = "BorrowDB";
     public static final String BOOKNAME = "bookname";
     public static final String ID = "_id";
     public static final String RETURNDATE = "returndate";
 
 
-    public dbHelper(Context mContext, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public DbHelper(Context mContext, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(mContext,name,factory,version);
 
     }
-
-
-
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

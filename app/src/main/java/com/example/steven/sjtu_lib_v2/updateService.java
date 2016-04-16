@@ -9,17 +9,17 @@ import android.os.IBinder;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class updateService extends Service {
-    public updateService() {
+public class UpdateService extends Service {
+    public UpdateService() {
     }
     private Timer timer;
     private TimerTask task;
     private Cursor cursor;
     private SQLiteDatabase dbReader;
-    private dbHelper db;
+    private DbHelper db;
     @Override
     public void onCreate() {
-        db=new dbHelper(this.getApplicationContext(),"BorrowDB",null,1);
+        db=new DbHelper(this.getApplicationContext(),"BorrowDB",null,1);
         dbReader=db.getReadableDatabase();
         super.onCreate();
         timer = new Timer();
@@ -36,10 +36,11 @@ public class updateService extends Service {
         };
         timer.schedule(task, 1000, 1000);
     }
+
     @Override
     public IBinder onBind(Intent intent) {
-        return null;}
-
+        return null;
+    }
 
     @Override
     public void onDestroy() {
