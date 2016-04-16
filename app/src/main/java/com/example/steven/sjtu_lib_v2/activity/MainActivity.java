@@ -28,7 +28,7 @@ import com.example.steven.sjtu_lib_v2.R;
 import com.example.steven.sjtu_lib_v2.adapter.BookItemAdapter;
 import com.example.steven.sjtu_lib_v2.dialog.BookDetailDialog;
 import com.example.steven.sjtu_lib_v2.dialog.LoadingDialog;
-import com.example.steven.sjtu_lib_v2.updateService;
+import com.example.steven.sjtu_lib_v2.UpdateService;
 import com.example.steven.sjtu_lib_v2.view.SuperSwipeRefreshLayout;
 import com.lapism.searchview.adapter.SearchAdapter;
 import com.lapism.searchview.adapter.SearchItem;
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         //启动服务按钮
         startButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, updateService.class);
+                Intent intent = new Intent(MainActivity.this, UpdateService.class);
                 startService(intent);
                 Toast.makeText(MainActivity.this, "Service启动成功", Toast.LENGTH_SHORT).show();
             }
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         stopButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // 创建Intent
-                Intent intent = new Intent(MainActivity.this, updateService.class);
+                Intent intent = new Intent(MainActivity.this, UpdateService.class);
                 stopService(intent);
                 Toast.makeText(MainActivity.this, "Service停止成功", Toast.LENGTH_SHORT).show();
             }
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         searchView.setAdapter(mSearchAdapter);
 //=======
-//        final Intent intent = new Intent(MainActivity.this, updateService.class);
+//        final Intent intent = new Intent(MainActivity.this, UpdateService.class);
 //        startService(intent);
 //        Toast.makeText(MainActivity.this, "Service启动成功", Toast.LENGTH_SHORT).show();
 //>>>>>>> Stashed changes
