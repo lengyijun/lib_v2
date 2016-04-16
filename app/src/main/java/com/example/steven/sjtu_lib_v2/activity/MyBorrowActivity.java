@@ -45,12 +45,12 @@ public class MyBorrowActivity extends AppCompatActivity implements RefreshBorrow
             if (name.length() == 0 || pass.length() == 0) {
                 Toast.makeText(getApplicationContext(),"尚未登陆",Toast.LENGTH_SHORT).show();
             }else {
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
                 ArrayList<Element> elementArrayList=new MyBorrowAsy(this,name,pass,getApplicationContext()).execute().get();
-=======
-                ArrayList<Element> elementArrayList=new Login(this,name,pass,getApplicationContext()).execute().get();
+//=======
+//                ArrayList<Element> elementArrayList=new Login(this,name,pass,getApplicationContext()).execute().get();
                 DB.insert(elementArrayList);
->>>>>>> Stashed changes
+//>>>>>>> Stashed changes
                 myBorrowAdapter=new MyBorrowAdapter(this,0,elementArrayList);
                 listView.setAdapter(myBorrowAdapter);
 

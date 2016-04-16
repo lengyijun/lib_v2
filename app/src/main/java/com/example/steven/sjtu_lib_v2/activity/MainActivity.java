@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar footerProgressBar;
     ImageView footerImageView;
     TextView footerTextView;
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
 
-=======
-    String url;
-    String NextUrls;
->>>>>>> Stashed changes
+//=======
+//    String url;
+//    String NextUrls;
+//>>>>>>> Stashed changes
     public List<Element> book_elements = new ArrayList<Element>();
     private List<SearchItem> mSuggestionList;
     BookItemAdapter bookItemAdapter;
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result_drawer);
         ButterKnife.bind(this);
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
 
         toolbar.inflateMenu(R.menu.menu_result);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -98,13 +98,13 @@ public class MainActivity extends AppCompatActivity {
         });
         dialog=new LoadingDialog(MainActivity.this);
         dialog.show();
-=======
->>>>>>> Stashed changes
+//=======
+//>>>>>>> Stashed changes
         get_intent_extra();
         plistview_init();
         superSwipelayout_init();
         get_list_from_url(url);
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -150,11 +150,11 @@ public class MainActivity extends AppCompatActivity {
         });
         super.onStart();
         searchView.setAdapter(mSearchAdapter);
-=======
+//=======
 //        final Intent intent = new Intent(MainActivity.this, updateService.class);
 //        startService(intent);
 //        Toast.makeText(MainActivity.this, "Service启动成功", Toast.LENGTH_SHORT).show();
->>>>>>> Stashed changes
+//>>>>>>> Stashed changes
     }
 
     private void superSwipelayout_init() {
