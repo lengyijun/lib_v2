@@ -9,7 +9,7 @@ import com.example.steven.sjtu_lib_v2.R;
 import com.example.steven.sjtu_lib_v2.RefreshBorrowInterface;
 import com.example.steven.sjtu_lib_v2.adapter.MyBorrowAdapter;
 import com.example.steven.sjtu_lib_v2.asynctask.MyBorrowAsy;
-import com.example.steven.sjtu_lib_v2.dbHelper;
+import com.example.steven.sjtu_lib_v2.DbHelper;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
 import com.snappydb.SnappydbException;
@@ -28,12 +28,12 @@ import butterknife.ButterKnife;
 public class MyBorrowActivity extends AppCompatActivity implements RefreshBorrowInterface {
     @Bind(R.id.listView2)ListView listView;
     MyBorrowAdapter myBorrowAdapter;
-    private dbHelper DB;
+    private DbHelper DB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myborrow_drawer);
-        DB = new dbHelper(getApplicationContext(),null,null,1);
+        DB = new DbHelper(getApplicationContext(),null,null,1);
 
         ButterKnife.bind(this);
         try {
@@ -50,7 +50,7 @@ public class MyBorrowActivity extends AppCompatActivity implements RefreshBorrow
                 myBorrowAdapter=new MyBorrowAdapter(this,0,elementArrayList);
                 listView.setAdapter(myBorrowAdapter);
 
-//                final Intent intent = new Intent(MyBorrowActivity.this, updateService.class);
+//                final Intent intent = new Intent(MyBorrowActivity.this, UpdateService.class);
 //                startService(intent);
 //                Toast.makeText(MyBorrowActivity.this, "Service启动成功", Toast.LENGTH_SHORT).show();
             }
